@@ -8,13 +8,19 @@
 
 import SwiftUI
 import AVKit
-import AVFoundation
 
 struct EventDetailAudioView: View {
     var eventViewModel: EventDetailViewModel
     @EnvironmentObject var settings: VaultSettings
     
-    var audioPlayer = AVAudioPlayer()
+    // Set up a bunch of state variables for the playing and such
+    @State var player: AVAudioPlayer!
+    @State var playing: Bool = false
+    @State var width: CGFloat = 0
+    @State var currentFile: String = ""
+    @State var finished: Bool = false
+    @State var del = AVdelegate()
+    @State var currentClock: String = "0:00"
     
     var body: some View {
         GeometryReader{ geometry in
@@ -22,7 +28,7 @@ struct EventDetailAudioView: View {
                 // Page Title
                 VStack{
                     HStack {
-                        Text("Audio Tasks")
+                        Text("Audio PlayList")
                             .font(.title)
                             .fontWeight(.semibold)
                         VStack{
@@ -49,7 +55,7 @@ struct EventDetailAudioView: View {
                     Spacer()
                 }
                 // Main VStack Content Frame
-                VStack{
+                VStack(spacing: 1){
                     // Start Main Content Here
                     // Either Using the scroll view or the vstack for control
                     // // // // // // // // // // // // // // // // //
@@ -80,35 +86,61 @@ struct EventDetailAudioView: View {
                     // Actual Audio player buttons and bar
                     Group{
                         Spacer()
-                        
-                        HStack{
+                            .frame(height: 4)
+                        ZStack(alignment: .leading){
                             Capsule()
                                 .fill(Color.black.opacity(0.1))
                                 .frame(height: 20)
+                            Capsule()
+                                .fill(Color.red.opacity(0.8)).frame(width: self.width, height: 20)
                         }
                         .frame(height: 20)
-                        
+                        Spacer()
+                            .frame(height: 4)
+                        HStack{
+                            Text("\(self.currentClock)")
+                                .font(.system(size: 50))
+                                .fontWeight(.bold)
+                        }
+                        .frame(height: 35)
+                        .padding(0)
+                        Spacer()
+                            .frame(height: 4)
                         HStack(spacing: geometry.size.width / 5 - 30){
                             Button(action: {
-                                //Action
+
                             }) {
                                 Image(systemName: "backward.fill")
                                     .font(.title)
                             }
                             Button(action: {
-                                //Action
+                                self.player.currentTime -= 15
+                                self.updateTime(width: geometry.size.width )
                             }) {
                                 Image(systemName: "gobackward.15")
                                     .font(.title)
                             }
                             Button(action: {
-                                //Action
+                                if self.player.isPlaying {
+                                    self.player.pause()
+                                    self.playing = false
+                                }else{
+                                    if self.finished {
+                                        self.player.currentTime = 0
+                                        self.width = 0
+                                        self.finished = false
+                                    }
+                                    self.player.play()
+                                    self.playing = true
+                                }
+
                             }) {
-                                Image(systemName: "play.fill")
+                                Image(systemName: self.playing && !self.finished ? "pause.fill" : "play.fill")
                                     .font(.title)
                             }
                             Button(action: {
-                                //Action
+                                self.player.currentTime += 15
+                                self.updateTime(width: geometry.size.width )
                             }) {
                                 Image(systemName: "goforward.15")
                                     .font(.title)
@@ -120,12 +152,38 @@ struct EventDetailAudioView: View {
                                     .font(.title)
                             }
                         }
-                        .frame(height: 70)
+                        .frame(height: 40)
+                        .padding(0)
+                    }
+                    .onAppear{
+                        let url = Bundle.main.path(forResource: "allup", ofType: "mp3")
+                        self.player = try! AVAudioPlayer(contentsOf: URL(fileURLWithPath: url!))
+                        self.player.delegate = self.del
+                        self.player.prepareToPlay()
                         
+                        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { (_) in
+                            if self.player.isPlaying {
+                                self.updateTime(width: geometry.size.width )
+//                                self.width = geometry.size.width * CGFloat( self.player.currentTime / self.player.duration )
+//                                print(self.player.currentTime)
+//                                let currentClockTime = Int( self.player.duration - self.player.currentTime ) + 1
+//                                let min = Int( currentClockTime / 60 )
+//                                let sec = Int( currentClockTime % 60 )
+//                                if sec < 10 {
+//                                    self.currentClock = "\(min):0\(sec)"
+//                                }else{
+//                                    self.currentClock = "\(min):\(sec)"
+//                                }
+                            }
+                        }
+                        NotificationCenter.default.addObserver(forName: NSNotification.Name("Finish"), object: nil, queue: .main) { (_) in
+                            self.finished = true
+                            self.currentClock = "0:00"
+                        }
                     }
                     Spacer()
-                        .frame(height: 0.1)
-                    // Event Standings List
+                        .frame(height: 4)
+
                     Group{
                         ScrollView{
                             HStack{
@@ -222,7 +280,37 @@ struct EventDetailAudioView: View {
         }
         .edgesIgnoringSafeArea(.bottom)
     }
+    func updateTime(width: CGFloat ){
+        self.width = width * CGFloat( self.player.currentTime / self.player.duration )
+        print(self.player.currentTime)
+        let offsetTime = 394.833 - 34.8
+        let currentClockTime = Int( offsetTime - self.player.currentTime ) + 1
+        let min = Int( currentClockTime / 60 )
+        let sec = Int( currentClockTime % 60 )
+        if sec < 0 {
+            if abs(sec) < 10 {
+                self.currentClock = "-\(abs(min)):0\(abs(sec))"
+            }else{
+                self.currentClock = "-\(abs(min)):\(abs(sec))"
+            }
+        }else{
+            if sec < 10 {
+                self.currentClock = "\(min):0\(sec)"
+            }else{
+                self.currentClock = "\(min):\(sec)"
+            }
+        }
+    }
 }
+
+class AVdelegate : NSObject,AVAudioPlayerDelegate{
+    
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        
+        NotificationCenter.default.post(name: NSNotification.Name("Finish"), object: nil)
+    }
+}
+
 
 struct EventDetailAudioView_Previews: PreviewProvider {
     static var previews: some View {

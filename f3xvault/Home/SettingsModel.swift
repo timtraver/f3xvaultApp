@@ -30,23 +30,37 @@ class VaultSettings: ObservableObject {
     @Published var currentMainTab: Tab
     @Published var search: SearchParameters
     
+    // Audio Preferences
+    @Published var audioVoice: String
+    @Published var audioLanguage: String
+    @Published var audioPrepTime: Int
+    @Published var audioAnnouncePilots: Bool
+
     init(){
-        self.user_id = 0
-        self.user_name = ""
-        self.user_first_name = ""
-        self.user_last_name = ""
-        self.pilot_id = 0
-        self.pilot_ama = ""
-        self.pilot_fai = ""
-        self.pilot_fai_license = ""
-        self.pilot_city = ""
-        self.country_code = ""
-        self.state_code = ""
+        self.user_id = UserDefaults.standard.integer( forKey: "user_id" )
+        self.user_name = UserDefaults.standard.string( forKey: "user_name" ) ?? ""
+        self.user_first_name = UserDefaults.standard.string( forKey: "user_first_name" ) ?? ""
+        self.user_last_name = UserDefaults.standard.string( forKey: "user_last_name" ) ?? ""
+        self.pilot_id = UserDefaults.standard.integer( forKey: "pilot_id" )
+        self.pilot_ama = UserDefaults.standard.string( forKey: "pilot_ama" ) ?? ""
+        self.pilot_fai = UserDefaults.standard.string( forKey: "pilot_fai" ) ?? ""
+        self.pilot_fai_license = UserDefaults.standard.string( forKey: "pilot_fai_license" ) ?? ""
+        self.pilot_city = UserDefaults.standard.string( forKey: "pilot_city" ) ?? ""
+        self.country_code = UserDefaults.standard.string( forKey: "country_code" ) ?? ""
+        self.state_code = UserDefaults.standard.string( forKey: "state_code" ) ?? ""
         self.atEvent = 0
         
         self.currentMainTab = Tab.home
         self.search = SearchParameters()
         
+        self.audioVoice = UserDefaults.standard.string( forKey: "audioVoice" ) ?? "en"
+        self.audioLanguage = UserDefaults.standard.string( forKey: "audioLanguage" ) ?? "en"
+        if UserDefaults.standard.integer( forKey: "audioPrepTime" ) == 0 {
+            self.audioPrepTime = 3
+        }else{
+            self.audioPrepTime = UserDefaults.standard.integer( forKey: "audioPrepTime" )
+        }
+        self.audioAnnouncePilots = UserDefaults.standard.bool( forKey: "audioAnnouncePilots" )
     }
 }
 

@@ -10,6 +10,26 @@ import Foundation
 import UIKit
 import SwiftUI
 
+func saveSettings(settings: VaultSettings){
+    // Simple Function to save the UserDefault settings
+    UserDefaults.standard.set( settings.user_id, forKey: "user_id")
+    UserDefaults.standard.set( settings.user_name, forKey: "user_name")
+    UserDefaults.standard.set( settings.user_first_name, forKey: "user_first_name")
+    UserDefaults.standard.set( settings.user_last_name, forKey: "user_last_name")
+    UserDefaults.standard.set( settings.pilot_id, forKey: "pilot_id")
+    UserDefaults.standard.set( settings.pilot_ama, forKey: "pilot_ama")
+    UserDefaults.standard.set( settings.pilot_fai, forKey: "pilot_fai")
+    UserDefaults.standard.set( settings.pilot_fai_license, forKey: "pilot_fai_license")
+    UserDefaults.standard.set( settings.pilot_city, forKey: "pilot_city")
+    UserDefaults.standard.set( settings.country_code, forKey: "country_code")
+    UserDefaults.standard.set( settings.state_code, forKey: "state_code")
+
+    UserDefaults.standard.set( settings.audioVoice, forKey: "audioVoice")
+    UserDefaults.standard.set( settings.audioLanguage, forKey: "audioLanguage")
+    UserDefaults.standard.set( settings.audioPrepTime, forKey: "audioPrepTime")
+    UserDefaults.standard.set( settings.audioAnnouncePilots, forKey: "audioAnnouncePilots")
+
+}
 func getFlag(from countryCode: String) -> String {
     return countryCode
         .unicodeScalars

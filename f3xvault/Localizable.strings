@@ -1,0 +1,32 @@
+/* 
+  Localizable.strings
+  f3xvault
+
+  Created by Timothy Traver on 5/16/20.
+  Copyright © 2020 Timothy Traver. All rights reserved.
+*/
+
+// Full localized strings table
+// English
+
+// Initial login screen
+"Login" = "Login";
+"Enter as Guest" = "Enter as Guest";
+
+// Main Tab bar
+"Home" = "Home";
+"Events" = "Events";
+"Locations" = "Locations";
+"Planes" = "Planes";
+"Pilots" = "Pilots";
+
+// Home screen
+"Welcome" = "Welcome";
+"Show Me My Last Event" = "Show Me My Last Event";
+"Take Me To Todays Event!" = "Take Me To Todays Event!";
+"Browse Events" = "Browse Events";
+"Browse Locations" = "Browse Locations";
+"Browse Planes" = "Browse Planes";
+"Browse Pilots" = "Browse Pilots";
+"Log Out" = "Log Out";
+

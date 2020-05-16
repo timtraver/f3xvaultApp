@@ -64,24 +64,11 @@ struct LoginView: View {
                     
                     Button(action: {
                         // Check to see if they are using the same user to log in, and don't both to make the call
-                        if self.login == UserDefaults.standard.string(forKey: "user_name") && UserDefaults.standard.string(forKey: "user_name") != "" {
+                        if self.login == self.settings.user_name && self.settings.user_name != "" {
                             // The login is the same, so lets just go home
-                            // But first, lets set the default user settings for the shared environment
-                            self.settings.user_id = UserDefaults.standard.integer(forKey: "user_id")
-                            self.settings.user_name = UserDefaults.standard.string(forKey: "user_name") ?? ""
-                            self.settings.user_first_name = UserDefaults.standard.string(forKey: "user_first_name") ?? ""
-                            self.settings.user_last_name = UserDefaults.standard.string(forKey: "user_last_name") ?? ""
-                            self.settings.pilot_id = UserDefaults.standard.integer(forKey: "pilot_id")
-                            self.settings.pilot_ama = UserDefaults.standard.string(forKey: "pilot_ama") ?? ""
-                            self.settings.pilot_fai = UserDefaults.standard.string(forKey: "pilot_fai") ?? ""
-                            self.settings.pilot_fai_license = UserDefaults.standard.string(forKey: "pilot_fai_license") ?? ""
-                            self.settings.pilot_city = UserDefaults.standard.string(forKey: "pilot_city") ?? ""
-                            self.settings.country_code = UserDefaults.standard.string(forKey: "country_code") ?? ""
-                            self.settings.state_code = UserDefaults.standard.string(forKey: "state_code") ?? ""
                             navigateToView(viewName: "Home", viewSettings: self.settings)
                             return
                         }
-                        print("Logging in Fresh")
                         // Perform the login and wait for the response to see if they can log in
                         // Turn on the network indicator
                         self.networkIndicator.toggle()
@@ -103,18 +90,6 @@ struct LoginView: View {
                                     self.keychain.set(self.login, forKey: "userLogin")
                                     self.keychain.set(self.password, forKey: "userPassword")
                                     // Save the desired non critical information about the user
-                                    UserDefaults.standard.set(user.user?.user_id, forKey: "user_id")
-                                    UserDefaults.standard.set(user.user?.user_name, forKey: "user_name")
-                                    UserDefaults.standard.set(user.user?.user_first_name, forKey: "user_first_name")
-                                    UserDefaults.standard.set(user.user?.user_last_name, forKey: "user_last_name")
-                                    UserDefaults.standard.set(user.user?.pilot_id, forKey: "pilot_id")
-                                    UserDefaults.standard.set(user.user?.pilot_ama, forKey: "pilot_ama")
-                                    UserDefaults.standard.set(user.user?.pilot_fai, forKey: "pilot_fai")
-                                    UserDefaults.standard.set(user.user?.pilot_fai_license, forKey: "pilot_fai_license")
-                                    UserDefaults.standard.set(user.user?.pilot_city, forKey: "pilot_city")
-                                    UserDefaults.standard.set(user.user?.country_code, forKey: "country_code")
-                                    UserDefaults.standard.set(user.user?.state_code, forKey: "state_code")
-                                    
                                     self.settings.user_id = user.user?.user_id ?? 0
                                     self.settings.user_name = user.user?.user_name ?? ""
                                     self.settings.user_first_name = user.user?.user_first_name ?? ""
@@ -126,7 +101,8 @@ struct LoginView: View {
                                     self.settings.pilot_city = user.user?.pilot_city ?? ""
                                     self.settings.country_code = user.user?.country_code ?? ""
                                     self.settings.state_code = user.user?.state_code ?? ""
-                                    
+                                    // Save the new settings to the UserDefaults
+                                    saveSettings(settings: self.settings)
                                     navigateToView(viewName: "Home", viewSettings: self.settings)
                                 }
                             case .failure(let error):
@@ -180,18 +156,10 @@ struct LoginView: View {
                     
                     Button(action: {
                         // Basically Navigate to the home view without a login
-                        UserDefaults.standard.set(0, forKey: "user_id")
-                        UserDefaults.standard.set(nil, forKey: "user_name")
-                        UserDefaults.standard.set(String("Guest"), forKey: "user_first_name")
-                        UserDefaults.standard.set(nil, forKey: "user_last_name")
-                        UserDefaults.standard.set(0, forKey: "pilot_id")
-                        UserDefaults.standard.set(nil, forKey: "country_code")
-                        UserDefaults.standard.set(nil, forKey: "state_code")
-                        
                         // Make the settings have those zeroed out values too
                         self.settings.user_id = 0
                         self.settings.user_name = ""
-                        self.settings.user_first_name = ""
+                        self.settings.user_first_name = "Guest"
                         self.settings.user_last_name = ""
                         self.settings.pilot_id = 0
                         self.settings.pilot_ama = ""
@@ -200,7 +168,8 @@ struct LoginView: View {
                         self.settings.pilot_city = ""
                         self.settings.country_code = ""
                         self.settings.state_code = ""
-                        
+                        // Save these settings to the UserDefaults
+                        saveSettings(settings: self.settings)
                         navigateToView(viewName: "Home", viewSettings: self.settings)
                         return
                     }

@@ -118,7 +118,7 @@ struct LoginView: View {
                             Spacer()
                                 .frame(width: 48)
                             Text("Login")
-                                .font(.system(size: 30))
+                                .font(.system(size: 26))
                                 .fontWeight(.semibold)
                                 .foregroundColor(Color.white)
                                 .multilineTextAlignment(.center)
@@ -175,7 +175,7 @@ struct LoginView: View {
                     }
                     ) {
                         Text("Enter as Guest")
-                            .font(.system(size: 25))
+                            .font(.system(size: 26))
                             .fontWeight(.semibold)
                             .foregroundColor(Color.white)
                     }

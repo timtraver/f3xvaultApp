@@ -125,7 +125,7 @@ struct EventSearchParamsView: View {
                             // Now go back to the search screen
                             navigateToView(viewName: "EventList", viewSettings: self.settings)
                             return
-                        }                            ) {
+                        }) {
                             HStack{
                                 Spacer()
                                     .frame(width: 20.0)
@@ -160,7 +160,7 @@ struct EventSearchParamsView: View {
                             // Now go back to the search screen
                             navigateToView(viewName: "EventList", viewSettings: self.settings)
                             return
-                        }                            ) {
+                        }) {
                             HStack{
                                 Spacer()
                                     .frame(width: 20.0)
@@ -188,9 +188,6 @@ struct EventSearchParamsView: View {
                     }.onAppear(){
                         self.loadSettings()
                     }
-                    
-                    
-                    
                     
                     // End of Main Content Here
                     // Don't touch anything below here unless necessary

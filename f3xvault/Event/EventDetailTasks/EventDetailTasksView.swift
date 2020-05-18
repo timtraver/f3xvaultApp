@@ -18,7 +18,7 @@ struct EventDetailTasksView: View {
                 // Page Title
                 VStack{
                     HStack {
-                        Text("Event Detail")
+                        Text("Event Tasks")
                             .font(.title)
                             .fontWeight(.semibold)
                         VStack{
@@ -95,36 +95,69 @@ struct EventDetailTasksView: View {
                             Spacer()
                         }.padding(1.0)
                     }
+                    
+                    if self.eventViewModel.eventInfo.event.event_type_code == "f3k" || self.eventViewModel.eventInfo.event.event_type_code == "f3j" || self.eventViewModel.eventInfo.event.event_type_code == "f5j" || self.eventViewModel.eventInfo.event.event_type_code == "td" || self.eventViewModel.eventInfo.event.event_type_code == "gps" || self.eventViewModel.eventInfo.event.event_type_code == "f5j" {
+                        // Button to go to timing screen
+                        Button(action: {
+                            //action to go to round audio playlist
+                            navigateToEventView(viewName: "EventDetailAudioView", eventViewModel: self.eventViewModel, viewSettings: self.settings)
+                            return
+                        }) {
+                            // Button Label
+                            HStack{
+                                Spacer()
+                                    .frame(width: 20.0)
+                                Image(systemName: "speaker.2")
+                                    .font(.system(size: 30))
+                                    .frame(width: 30)
+                                Spacer()
+                                    .frame(width: 20.0)
+                                Text("Audio Playlist")
+                                    .font(.system(size: 20))
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(Color(.white))
+                                    .frame(width: 200)
+                                Spacer()
+                            }
+                            .frame(width: 300.0, height: 50.0)
+                            .background(Color(.systemGreen))
+                            .cornerRadius(10)
+                            
+                        }
+                        Spacer()
+                    }
+                    HStack{
+                        HStack {
+                            Text("Event Tasks")
+                                .padding(.leading, 5.0)
+                                .frame( height: 24.0, alignment: .leading )
+                            Spacer()
+                        }.padding(.top, 2.0)
+                            .background(Color(.systemBlue))
+                            .foregroundColor(.white)
+                    }
+                    HStack(alignment: .top){
+                        Text("Rnd")
+                            .frame(width: 25)
+                        Text("Task Code")
+                            .frame(width: 70)
+                        Spacer()
+                            .frame(width: 5)
+                        Text("Task Description")
+                        Spacer()
+                    }
+                    .font(.system(size: 12))
+                    .background(Color(.systemBlue).opacity(0.2))
+
                     Spacer()
                         .frame(height: 0.1)
                     // Event Standings List
                     Group{
                         ScrollView{
-                            HStack{
-                                HStack {
-                                    Text("Event Tasks")
-                                        .padding(.leading, 5.0)
-                                        .frame( height: 24.0, alignment: .leading )
-                                    Spacer()
-                                }.padding(.top, 2.0)
-                                    .background(Color(.systemBlue))
-                                    .foregroundColor(.white)
-                            }
-                            
                             // Task List
-                            HStack(alignment: .top){
-                                Text("Rnd")
-                                    .frame(width: 25)
-                                Text("Task Code")
-                                    .frame(width: 70)
-                                Spacer()
-                                    .frame(width: 5)
-                                Text("Task Description")
-                                Spacer()
-                            }
-                            .font(.system(size: 12))
-                            .background(Color(.systemBlue).opacity(0.2))
                             VStack{
+                                Spacer()
+                                    .frame(height: 0.01)
                                 ForEach( self.eventViewModel.eventInfo.event.tasks ){ task in
                                     Group{
                                         HStack(alignment: .top){
@@ -162,37 +195,6 @@ struct EventDetailTasksView: View {
                                 }
                                 Spacer()
                                     .frame(height: 20)
-                                
-                                if self.eventViewModel.eventInfo.event.event_type_code == "f3k" {
-                                    // Button to go to timing screen
-                                    Button(action: {
-                                        //action to go to round audio playlist
-                                        navigateToEventView(viewName: "EventDetailAudioView", eventViewModel: self.eventViewModel, viewSettings: self.settings)
-                                        return
-                                    }) {
-                                        // Button Label
-                                        HStack{
-                                            Spacer()
-                                                .frame(width: 20.0)
-                                            Image(systemName: "speaker.2")
-                                                .font(.system(size: 30))
-                                                .frame(width: 30)
-                                            Spacer()
-                                                .frame(width: 20.0)
-                                            Text("Audio Playlist")
-                                                .font(.system(size: 20))
-                                                .fontWeight(.semibold)
-                                                .foregroundColor(Color(.white))
-                                                .frame(width: 200)
-                                            Spacer()
-                                        }
-                                        .frame(width: 300.0, height: 50.0)
-                                        .background(Color(.systemGreen))
-                                        .cornerRadius(10)
-                                        
-                                    }
-                                    Spacer()
-                                }
                             }
                             
                         }

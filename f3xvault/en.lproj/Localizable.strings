@@ -22,8 +22,10 @@
 
 // Home screen
 "Welcome" = "Welcome";
+"Welcome \(self.settings.user_first_name) !" = "Welcome \(self.settings.user_first_name) !";
 "Show Me My Last Event" = "Show Me My Last Event";
 "Take Me To Todays Event!" = "Take Me To Todays Event!";
+"View My Profile" = "View My Profile";
 "Browse Events" = "Browse Events";
 "Browse Locations" = "Browse Locations";
 "Browse Planes" = "Browse Planes";

@@ -33,4 +33,3 @@ struct UserInfo: Codable{
     var state_code: String? = ""
     var country_code: String? = ""
 }
-

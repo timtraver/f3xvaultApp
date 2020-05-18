@@ -8,6 +8,7 @@
 
 import SwiftUI
 import AVKit
+import AVFoundation
 
 struct EventDetailAudioView: View {
     var eventViewModel: EventDetailViewModel
@@ -21,7 +22,9 @@ struct EventDetailAudioView: View {
     @State var finished: Bool = false
     @State var del = AVdelegate()
     @State var currentClock: String = "0:00"
-    
+
+    let horns = getHorns()
+
     var body: some View {
         GeometryReader{ geometry in
             VStack{
@@ -80,6 +83,15 @@ struct EventDetailAudioView: View {
                             Text("\(self.eventViewModel.eventInfo.event.event_type_name) ")
                                 .font(.system(size: 12))
                             Spacer()
+                            
+                            Button(action: {
+                                // Go to audio preferences
+                                navigateToEventView(viewName: "EventDetailAudioPrefsView", eventViewModel: self.eventViewModel, viewSettings: self.settings)
+                                return
+                            }) {
+                                Text("Audio Prefs")
+                                Image(systemName: "chevron.right")
+                            }
                         }
                         .padding(1.0)
                     }
@@ -98,9 +110,11 @@ struct EventDetailAudioView: View {
                         Spacer()
                             .frame(height: 4)
                         HStack{
+                            Spacer()
                             Text("\(self.currentClock)")
                                 .font(.system(size: 50))
                                 .fontWeight(.bold)
+                            Spacer()
                         }
                         .frame(height: 35)
                         .padding(0)
@@ -114,39 +128,60 @@ struct EventDetailAudioView: View {
                                     .font(.title)
                             }
                             Button(action: {
-                                self.player.currentTime -= 15
-                                self.updateTime(width: geometry.size.width )
+//                                self.player.currentTime -= 15
+//                                self.updateTime(width: geometry.size.width )
                             }) {
                                 Image(systemName: "gobackward.15")
                                     .font(.title)
                             }
                             Button(action: {
-                                if self.player.isPlaying {
-                                    self.player.pause()
+                                if self.playing == true {
+                                    self.player.stop()
                                     self.playing = false
-                                }else{
-                                    if self.finished {
-                                        self.player.currentTime = 0
-                                        self.width = 0
-                                        self.finished = false
-                                    }
+                                }
+                                self.player = getPlayer( fileName: "airhorn1", fileExt: "wav" )
+                                if self.player != nil {
+                                    self.player.delegate = self.del
+                                    self.player.prepareToPlay()
                                     self.player.play()
                                     self.playing = true
                                 }
-
+                                
                             }) {
                                 Image(systemName: self.playing && !self.finished ? "pause.fill" : "play.fill")
                                     .font(.title)
                             }
                             Button(action: {
-                                self.player.currentTime += 15
-                                self.updateTime(width: geometry.size.width )
+//                                self.player.currentTime += 15
+//                                self.updateTime(width: geometry.size.width )
                             }) {
                                 Image(systemName: "goforward.15")
                                     .font(.title)
                             }
                             Button(action: {
                                 //Action
+                                UIApplication.shared.isIdleTimerDisabled = true
+                                let synth = SpeechSynthesizer()
+                                synth.voice = self.settings.audioVoice
+                                
+                                synth.speak( "Round 1", 0, 0.2 )
+                                synth.speak( "F 3 k, Task f - 10 Minute Window - Best Three Flights Maximum 3 minutes, maximum 6 launches", 0, 0.2 )
+
+                                synth.speak( "Group A", 0, 0.2 )
+                                synth.speak( "Pilot List, ", 0, 0.2 )
+                                for pilot in self.eventViewModel.eventInfo.event.pilots {
+                                    let fullname = pilot.pilot_first_name + " " + pilot.pilot_last_name + ","
+                                    print(fullname)
+                                    synth.speak(fullname)
+                                }
+
+//                                synth.speak( "10 Minute Window", 0, 0.2 )
+//                                synth.speak( "Best Three Flights Maximum 3 minutes, maximum 6 launches", 0, 0.2 )
+                                synth.speak( "\(self.settings.audioPrepTime) minute preparation window Starts in 5, 4, 3, 2, 1", 0, 0.2 )
+                                synth.speak( "1 minute No Fly window", 0, 0.2 )
+
+
+                                return
                             }) {
                                 Image(systemName: "forward.fill")
                                     .font(.title)
@@ -156,14 +191,14 @@ struct EventDetailAudioView: View {
                         .padding(0)
                     }
                     .onAppear{
-                        let url = Bundle.main.path(forResource: "allup", ofType: "mp3")
-                        self.player = try! AVAudioPlayer(contentsOf: URL(fileURLWithPath: url!))
-                        self.player.delegate = self.del
-                        self.player.prepareToPlay()
+//                        let url = Bundle.main.path(forResource: "airhorn2", ofType: "wav")
+//                        self.player = try! AVAudioPlayer(contentsOf: URL(fileURLWithPath: url!))
+//                        self.player.delegate = self.del
+//                        self.player.prepareToPlay()
                         
-                        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { (_) in
-                            if self.player.isPlaying {
-                                self.updateTime(width: geometry.size.width )
+//                        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { (_) in
+//                            if self.player.isPlaying {
+//                                self.updateTime(width: geometry.size.width )
 //                                self.width = geometry.size.width * CGFloat( self.player.currentTime / self.player.duration )
 //                                print(self.player.currentTime)
 //                                let currentClockTime = Int( self.player.duration - self.player.currentTime ) + 1
@@ -174,58 +209,48 @@ struct EventDetailAudioView: View {
 //                                }else{
 //                                    self.currentClock = "\(min):\(sec)"
 //                                }
-                            }
-                        }
-                        NotificationCenter.default.addObserver(forName: NSNotification.Name("Finish"), object: nil, queue: .main) { (_) in
-                            self.finished = true
-                            self.currentClock = "0:00"
-                        }
+//                            }
+//                        }
+//                        NotificationCenter.default.addObserver(forName: NSNotification.Name("Finish"), object: nil, queue: .main) { (_) in
+//                            self.finished = true
+//                            self.currentClock = "0:00"
+//                        }
                     }
+                    
                     Spacer()
                         .frame(height: 4)
+                    
+                    HStack{
+                        HStack {
+                            Text("Audio Playlist Queue")
+                                .padding(.leading, 5.0)
+                                .frame( height: 24.0, alignment: .leading )
+                            Spacer()
+                        }.padding(.top, 2.0)
+                            .background(Color(.systemBlue))
+                            .foregroundColor(.white)
+                    }
+                    HStack(alignment: .top){
+                        Text("Num")
+                            .frame(width: 30)
+                        Text("Queue Description")
+                        Spacer()
+                    }
+                    .font(.system(size: 12))
+                    .background(Color(.systemBlue).opacity(0.2))
 
                     Group{
                         ScrollView{
-                            HStack{
-                                HStack {
-                                    Text("Event Tasks")
-                                        .padding(.leading, 5.0)
-                                        .frame( height: 24.0, alignment: .leading )
-                                    Spacer()
-                                }.padding(.top, 2.0)
-                                    .background(Color(.systemBlue))
-                                    .foregroundColor(.white)
-                            }
-                            
                             // Task List
-                            HStack(alignment: .top){
-                                Text("Rnd")
-                                    .frame(width: 25)
-                                Text("Task Code")
-                                    .frame(width: 70)
-                                Spacer()
-                                    .frame(width: 5)
-                                Text("Task Description")
-                                Spacer()
-                            }
-                            .font(.system(size: 12))
-                            .background(Color(.systemBlue).opacity(0.2))
                             VStack{
+                                Spacer()
+                                    .frame(height: 0.01)
                                 ForEach( self.eventViewModel.eventInfo.event.tasks ){ task in
                                     Group{
                                         HStack(alignment: .top){
                                             Text("\(task.round_number)")
-                                                .frame(width: 25)
+                                                .frame(width: 30)
                                                 .foregroundColor(Color(.black))
-                                            HStack{
-                                                Text("\(task.flight_type_code)")
-                                                    .font(.system(size: 11))
-                                                    .frame(width: 70)
-                                                Spacer()
-                                            }
-                                            .frame(width: 70)
-                                            Spacer()
-                                                .frame(width: 5)
                                             Text("\(task.flight_type_name)")
                                                 .fontWeight(.bold)
                                             Spacer()
@@ -233,25 +258,11 @@ struct EventDetailAudioView: View {
                                         .frame(width: geometry.size.width)
                                         .background(Color(.systemBlue).opacity(task.rowColor ?? false ? 0.2 : 0 ))
                                         .foregroundColor(Color(.systemBlue))
-                                        
-                                        HStack(alignment: .top){
-                                            Text("")
-                                                .frame(width: 110)
-                                            Text("\(task.flight_type_description)")
-                                                .font(.system(size: 14))
-                                                .foregroundColor(.black)
-                                        }
-                                        .frame(width: geometry.size.width)
-                                        .background(Color(.systemBlue).opacity(task.rowColor ?? false ? 0.2 : 0 ))
-                                        .padding(.bottom, 1)
                                     }
                                 }
                                 Spacer()
                                     .frame(height: 20)
-                                
-
                             }
-                            
                         }
                         .font(.system(size: 16))
                         Spacer()
@@ -281,25 +292,25 @@ struct EventDetailAudioView: View {
         .edgesIgnoringSafeArea(.bottom)
     }
     func updateTime(width: CGFloat ){
-        self.width = width * CGFloat( self.player.currentTime / self.player.duration )
-        print(self.player.currentTime)
-        let offsetTime = 394.833 - 34.8
-        let currentClockTime = Int( offsetTime - self.player.currentTime ) + 1
-        let min = Int( currentClockTime / 60 )
-        let sec = Int( currentClockTime % 60 )
-        if sec < 0 {
-            if abs(sec) < 10 {
-                self.currentClock = "-\(abs(min)):0\(abs(sec))"
-            }else{
-                self.currentClock = "-\(abs(min)):\(abs(sec))"
-            }
-        }else{
-            if sec < 10 {
-                self.currentClock = "\(min):0\(sec)"
-            }else{
-                self.currentClock = "\(min):\(sec)"
-            }
-        }
+//        self.width = width * CGFloat( self.player.currentTime / self.player.duration )
+//        print(self.player.currentTime)
+//        let offsetTime = 394.833 - 34.8
+//        let currentClockTime = Int( offsetTime - self.player.currentTime ) + 1
+//        let min = Int( currentClockTime / 60 )
+//        let sec = Int( currentClockTime % 60 )
+//        if sec < 0 {
+//            if abs(sec) < 10 {
+//                self.currentClock = "-\(abs(min)):0\(abs(sec))"
+//            }else{
+//                self.currentClock = "-\(abs(min)):\(abs(sec))"
+//            }
+//        }else{
+//            if sec < 10 {
+//                self.currentClock = "\(min):0\(sec)"
+//            }else{
+//                self.currentClock = "\(min):\(sec)"
+//            }
+//        }
     }
 }
 
@@ -310,6 +321,42 @@ class AVdelegate : NSObject,AVAudioPlayerDelegate{
         NotificationCenter.default.post(name: NSNotification.Name("Finish"), object: nil)
     }
 }
+
+class SpeechSynthesizer: NSObject {
+    private let synthesizer = AVSpeechSynthesizer()
+    var voice: String = "en"
+    
+    override init() {
+        super.init()
+        synthesizer.delegate = self
+    }
+    
+    func speak(_ item: String, _ pauseBefore: Double = 0.0, _ pauseAfter: Double = 0.0 ){
+        let speechUtterance = AVSpeechUtterance(string: item)
+        speechUtterance.voice = AVSpeechSynthesisVoice( language: self.voice )
+        speechUtterance.rate = 0.5
+        speechUtterance.preUtteranceDelay = pauseBefore
+        speechUtterance.postUtteranceDelay = pauseAfter
+        synthesizer.speak(speechUtterance)
+    }
+    
+    func stop() {
+        synthesizer.stopSpeaking(at: .immediate)
+    }
+    
+}
+
+extension SpeechSynthesizer: AVSpeechSynthesizerDelegate {
+    func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didStart utterance: AVSpeechUtterance) {
+        print("--- didStart")
+    }
+    
+    func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
+        print("--- didFinish")
+    }
+}
+
+
 
 
 struct EventDetailAudioView_Previews: PreviewProvider {

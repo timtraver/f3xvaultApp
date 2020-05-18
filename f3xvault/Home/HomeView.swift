@@ -81,7 +81,7 @@ struct HomeView: View {
                                     HStack{
                                         Spacer()
                                             .frame(width: 20.0)
-                                        Text("Show Me My Last Event")
+                                        Text("My Recent Event")
                                             .font(.system(size: 20))
                                             .fontWeight(.semibold)
                                             .foregroundColor(Color(.white))

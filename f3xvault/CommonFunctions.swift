@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import SwiftUI
+import AVFoundation
 
 func saveSettings(settings: VaultSettings){
     // Simple Function to save the UserDefault settings
@@ -28,6 +29,7 @@ func saveSettings(settings: VaultSettings){
     UserDefaults.standard.set( settings.audioLanguage, forKey: "audioLanguage")
     UserDefaults.standard.set( settings.audioPrepTime, forKey: "audioPrepTime")
     UserDefaults.standard.set( settings.audioAnnouncePilots, forKey: "audioAnnouncePilots")
+    UserDefaults.standard.set( settings.audioHorn, forKey: "audioHorn")
 
 }
 func getFlag(from countryCode: String) -> String {
@@ -92,7 +94,36 @@ func getCountries() -> [Country]{
     }
     return countries
 }
-
+func getHorns() -> [Horn]{
+    var horns = [Horn]()
+    horns.append( Horn( id: 0, fileName: "airhorn1", fileType: "wav", description: "Air Horn 1" ) )
+    horns.append( Horn( id: 1, fileName: "airhorn2", fileType: "wav", description: "Air Horn 2" ) )
+    horns.append( Horn( id: 2, fileName: "epichorn", fileType: "wav", description: "Epic Horn 1" ) )
+    horns.append( Horn( id: 3, fileName: "inception", fileType: "wav", description: "Inception Horn" ) )
+    return horns
+}
+func getVoices() -> [Voice]{
+    var voices = [Voice]()
+    let systemVoices = AVSpeechSynthesisVoice.speechVoices()
+    print(systemVoices)
+    for voice in systemVoices {
+        voices.append( Voice(code: voice.language,name: voice.name, identifier: voice.identifier) )
+    }
+    return voices
+}
+func getLanguages() -> [(key: String, value: String)] {
+    return [
+        "en" : "English",
+        "es" : "Spanish",
+    ].sorted{$0.key < $1.key}
+}
+func getPrepTimes() -> [(key: Int, value: String)] {
+    return [
+        1 : "1 Minute",
+        2 : "2 Minutes",
+        3 : "3 Minutes",
+    ].sorted{$0.key < $1.key}
+}
 
 func navigateToView(viewName: String, viewSettings: VaultSettings) {
     // Function to navigate to a particular view
@@ -187,6 +218,9 @@ func navigateToEventView(viewName: String, eventViewModel: EventDetailViewModel,
         case "EventDetailAudioView":
             viewSettings.currentMainTab = Tab.event_tasks
             window.rootViewController = UIHostingController(rootView: EventDetailAudioView(eventViewModel: eventViewModel ).environmentObject(viewSettings))
+        case "EventDetailAudioPrefsView":
+            viewSettings.currentMainTab = Tab.event_tasks
+            window.rootViewController = UIHostingController(rootView: EventDetailAudioPrefsView(eventViewModel: eventViewModel ).environmentObject(viewSettings))
         case "EventDetailStatsView":
             viewSettings.currentMainTab = Tab.event_stats
             window.rootViewController = UIHostingController(rootView: EventDetailStatsView(eventViewModel: eventViewModel ).environmentObject(viewSettings))

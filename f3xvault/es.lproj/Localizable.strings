@@ -1,0 +1,34 @@
+/* 
+  Localizable.strings
+  f3xvault
+
+  Created by Timothy Traver on 5/16/20.
+  Copyright © 2020 Timothy Traver. All rights reserved.
+*/
+
+// Full localized strings table
+// English
+
+// Initial login screen
+"Login" = "Iniciar sesión";
+"Enter as Guest" = "Entrar Como Invitado";
+
+// Main Tab bar
+"Home" = "Casa";
+"Events" = "Eventos";
+"Locations" = "Lugares";
+"Planes" = "Aviones";
+"Pilots" = "Pilotos";
+
+// Home screen
+"Welcome" = "Bienvenidos";
+"Welcome \(self.settings.user_first_name) !" = "Bienvenidos \(self.settings.user_first_name) !";
+"Show Me My Last Event" = "Muéstrame Mi último Evento";
+"Take Me To Todays Event!" = "¡Llévame al evento de hoy!";
+"View My Profile" = "Mira mi perfil";
+"Browse Events" = "Examinar Eventos";
+"Browse Locations" = "Examinar Ubicaciones";
+"Browse Planes" = "Examinar Aviones";
+"Browse Pilots" = "Explorar Pilotos";
+"Log Out" = "Cerrar sesión";
+

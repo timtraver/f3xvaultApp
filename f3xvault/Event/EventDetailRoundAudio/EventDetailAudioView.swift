@@ -34,6 +34,7 @@ struct EventDetailAudioView: View {
                         Text("Audio PlayList")
                             .font(.title)
                             .fontWeight(.semibold)
+                            .fixedSize()
                         VStack{
                             Spacer()
                             HStack {
@@ -49,8 +50,9 @@ struct EventDetailAudioView: View {
                                         .foregroundColor(.blue)
                                 }
                             }
-                        }.frame(height: 20)
-                            .padding(.trailing, 5)
+                        }
+                        .frame(height: 20)
+                        .padding(.trailing, 5)
                         
                         Spacer()
                     }
@@ -122,6 +124,36 @@ struct EventDetailAudioView: View {
                             .frame(height: 4)
                         HStack(spacing: geometry.size.width / 5 - 30){
                             Button(action: {
+                                // Lets say all of the flight tasks just to hear them
+                                let flightTypes = FlightDescriptions()
+                                let synth = SpeechSynthesizer()
+                                synth.voice = self.settings.audioVoice
+                                synth.speak( (flightTypes.flights["f3k_a"]!["description"])!, 0, 0.2 )
+                                synth.speak( (flightTypes.flights["f3k_a2"]!["description"])!, 0, 0.2 )
+                                synth.speak( (flightTypes.flights["f3k_b"]!["description"])!, 0, 0.2 )
+                                synth.speak( (flightTypes.flights["f3k_b2"]!["description"])!, 0, 0.2 )
+                                synth.speak( (flightTypes.flights["f3k_c"]!["description"])!, 0, 0.2 )
+                                synth.speak( (flightTypes.flights["f3k_c2"]!["description"])!, 0, 0.2 )
+                                synth.speak( (flightTypes.flights["f3k_c3"]!["description"])!, 0, 0.2 )
+                                synth.speak( (flightTypes.flights["f3k_d"]!["description"])!, 0, 0.2 )
+                                synth.speak( (flightTypes.flights["f3k_d2"]!["description"])!, 0, 0.2 )
+                                synth.speak( (flightTypes.flights["f3k_e"]!["description"])!, 0, 0.2 )
+                                synth.speak( (flightTypes.flights["f3k_e2"]!["description"])!, 0, 0.2 )
+                                synth.speak( (flightTypes.flights["f3k_e3"]!["description"])!, 0, 0.2 )
+                                synth.speak( (flightTypes.flights["f3k_f"]!["description"])!, 0, 0.2 )
+                                synth.speak( (flightTypes.flights["f3k_g"]!["description"])!, 0, 0.2 )
+                                synth.speak( (flightTypes.flights["f3k_h"]!["description"])!, 0, 0.2 )
+                                synth.speak( (flightTypes.flights["f3k_i"]!["description"])!, 0, 0.2 )
+                                synth.speak( (flightTypes.flights["f3k_j"]!["description"])!, 0, 0.2 )
+                                synth.speak( (flightTypes.flights["f3k_k"]!["description"])!, 0, 0.2 )
+                                synth.speak( (flightTypes.flights["f3k_l"]!["description"])!, 0, 0.2 )
+                                synth.speak( (flightTypes.flights["f3k_m"]!["description"])!, 0, 0.2 )
+
+                                synth.speak( (flightTypes.flights["f3j_duration"]!["description"])!, 0, 0.2 )
+                                synth.speak( (flightTypes.flights["f5j_duration"]!["description"])!, 0, 0.2 )
+
+                                synth.speak( (flightTypes.flights["gps_distance"]!["description"])!, 0, 0.2 )
+                                synth.speak( (flightTypes.flights["gps_speed"]!["description"])!, 0, 0.2 )
 
                             }) {
                                 Image(systemName: "backward.fill")
@@ -138,13 +170,20 @@ struct EventDetailAudioView: View {
                                 if self.playing == true {
                                     self.player.stop()
                                     self.playing = false
+                                    self.finished = false
                                 }
-                                self.player = getPlayer( fileName: "airhorn1", fileExt: "wav" )
+                                self.player = getPlayer( fileName: self.horns[UserDefaults.standard.integer( forKey: "audioHorn" )].fileName, fileExt: self.horns[UserDefaults.standard.integer( forKey: "audioHorn" )].fileType )
                                 if self.player != nil {
                                     self.player.delegate = self.del
                                     self.player.prepareToPlay()
+                                    self.player.setVolume(self.settings.audioHornVolume, fadeDuration: 0)
                                     self.player.play()
                                     self.playing = true
+                                    
+                                    NotificationCenter.default.addObserver(forName: NSNotification.Name("Finish"), object: nil, queue: .main) { (_) in
+                                        self.finished = true
+                                    }
+
                                 }
                                 
                             }) {
@@ -324,7 +363,7 @@ class AVdelegate : NSObject,AVAudioPlayerDelegate{
 
 class SpeechSynthesizer: NSObject {
     private let synthesizer = AVSpeechSynthesizer()
-    var voice: String = "en"
+    var voice: String = UserDefaults.standard.string( forKey: "audioVoice" ) ?? "com.apple.ttsbundle.Samantha-compact"
     
     override init() {
         super.init()
@@ -333,7 +372,7 @@ class SpeechSynthesizer: NSObject {
     
     func speak(_ item: String, _ pauseBefore: Double = 0.0, _ pauseAfter: Double = 0.0 ){
         let speechUtterance = AVSpeechUtterance(string: item)
-        speechUtterance.voice = AVSpeechSynthesisVoice( language: self.voice )
+        speechUtterance.voice = AVSpeechSynthesisVoice( identifier: self.voice )
         speechUtterance.rate = 0.5
         speechUtterance.preUtteranceDelay = pauseBefore
         speechUtterance.postUtteranceDelay = pauseAfter

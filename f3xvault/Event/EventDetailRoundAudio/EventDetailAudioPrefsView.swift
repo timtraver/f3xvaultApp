@@ -19,7 +19,8 @@ struct EventDetailAudioPrefsView: View {
     @State var selectedVoice: String = UserDefaults.standard.string( forKey: "audioVoice" ) ?? "com.apple.ttsbundle.Samantha-compact"
     @State var selectedAnnouncePilots: Bool = UserDefaults.standard.bool( forKey: "audioAnnouncePilots" )
     @State var selectedHorn: Int = UserDefaults.standard.integer( forKey: "audioHorn" )
-    
+    @State var selectedHornVolume: Float = UserDefaults.standard.float( forKey: "audioHornVolume" )
+
     @State private var player: AVAudioPlayer!
     @State private var del = AVdelegate()
     
@@ -27,6 +28,7 @@ struct EventDetailAudioPrefsView: View {
     let languages = getLanguages()
     let prepTimes = getPrepTimes()
     let horns = getHorns()
+    let hornVolumes = getVolumes()
     
     var body: some View {
         GeometryReader{ geometry in
@@ -74,6 +76,11 @@ struct EventDetailAudioPrefsView: View {
                                             Text(horn.description)
                                         }
                                     }
+                                    Picker(selection: self.$selectedHornVolume, label: Text("Horn Relative Volume")) {
+                                        ForEach( self.hornVolumes, id: \.key ) { volume in
+                                            Text(volume.value)
+                                        }
+                                    }
                                 }
                                 Section(header: Text("Timing")){
                                     Picker(selection: self.$selectedPrepTime, label: Text("Prep Time Length")) {
@@ -95,6 +102,7 @@ struct EventDetailAudioPrefsView: View {
                             self.settings.audioPrepTime = 2
                             self.settings.audioAnnouncePilots = true
                             self.settings.audioHorn = 0
+                            self.settings.audioHornVolume = 1.0
                             saveSettings(settings: self.settings)
                             // Now go back to the search screen
                             navigateToEventView( viewName: "EventDetailAudioView", eventViewModel: self.eventViewModel , viewSettings: self.settings)
@@ -129,8 +137,10 @@ struct EventDetailAudioPrefsView: View {
                             self.settings.audioAnnouncePilots = self.selectedAnnouncePilots
                             self.settings.audioPrepTime = self.selectedPrepTime
                             self.settings.audioHorn = self.selectedHorn
+                            self.settings.audioHornVolume = self.selectedHornVolume
                             saveSettings(settings: self.settings)
                             print(self.selectedVoice)
+                            print(self.selectedHornVolume)
                             // Now go back to the search screen
                             navigateToEventView( viewName: "EventDetailAudioView", eventViewModel: self.eventViewModel , viewSettings: self.settings)
                             return
@@ -183,6 +193,7 @@ struct EventDetailAudioPrefsView: View {
         if self.player != nil {
             self.player.delegate = self.del
             self.player.prepareToPlay()
+            self.player.setVolume(self.selectedHornVolume, fadeDuration: 0)
             self.player.play()
         }
         return

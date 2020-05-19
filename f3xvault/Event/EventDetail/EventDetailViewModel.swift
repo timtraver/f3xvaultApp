@@ -14,7 +14,8 @@ class EventDetailViewModel: ObservableObject {
     
     @Published var eventInfo = EventDetailResponse()
     @Published var networkIndicator = true
-    
+    @Published var playListQueue: [playQueueEntry]?
+
     init(event_id: Int?){
         self.event_id = event_id ?? 0
         if self.event_id != 0 {
@@ -82,6 +83,7 @@ class EventDetailViewModel: ObservableObject {
                 
                 self.eventInfo = results
                 self.networkIndicator = false
+                self.createPlaylist()
                 return
             case .failure(let error):
                 print(error)
@@ -89,4 +91,91 @@ class EventDetailViewModel: ObservableObject {
         }
         return
     }
+    
+    private func createPlaylist(){
+        // This is a method to create the playlist from the eventDetailViewModel data
+        print("Got into createPlayList")
+        if self.eventInfo.event.event_type_code == "f3k" {
+            print("Got into f3k playlist")
+
+            // Build f3k audio playlist from the rounds and flights
+            var groups = self.getGroups()
+            var sequence:Int = 1
+            
+            
+            
+            
+            for pilot in self.eventInfo.event.prelim_standings.standings {
+                for round in pilot.rounds {
+                    var tempFlightInfo = self.getTaskDescription(round: round.round_number)
+                    var tempEntry = playQueueEntry()
+                    tempEntry.sequenceID = sequence
+                    tempEntry.textDescription = "Round \(round.round_number)"
+                    tempEntry.spokenText = "Round \(round.round_number)"
+                    
+                    
+                    
+                                
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+
+                }
+            }
+
+            
+            
+            
+            
+            
+            
+            
+        }
+        
+        
+    }
+    private func addQueueEntry(entry: playQueueEntry){
+        // Function to add a ueue entry to the onject array
+        
+        return
+    }
+    private func getTaskDescription(round: Int) -> [String:String]{
+        // Function to get the round task description for the particular round
+        let flightTypes = FlightDescriptions()
+        var returnArray: [String:String] = [:]
+        for task in self.eventInfo.event.tasks {
+            if task.round_number == round {
+                let code = task.flight_type_code
+                returnArray = flightTypes.flights[code] ?? [:]
+            }
+        }
+        return returnArray
+    }
+    private func getGroups() -> [String] {
+        // Function to determine how many groups there are in each round
+        var groups: [String] = []
+        // Step through the rounds and determine the groups
+        for pilot in self.eventInfo.event.prelim_standings.standings {
+            for round in pilot.rounds {
+                for flight in round.flights {
+                    if !groups.contains(flight.flight_group) {
+                        groups.append(flight.flight_group)
+                    }
+                }
+            }
+        }
+        return groups
+    }
+    private func getPilotList(round:Int, group:String) -> [String] {
+        var pilots: [String] = []
+        
+        
+        return pilots
+    }
+    
+    
 }

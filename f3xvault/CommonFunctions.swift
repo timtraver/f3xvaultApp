@@ -141,6 +141,7 @@ func getVolumes() -> [(key: Float, value: String)] {
     ].sorted{$0.key < $1.key}
 }
 
+// Navigation routines
 func navigateToView(viewName: String, viewSettings: VaultSettings) {
     // Function to navigate to a particular view
     if let window = UIApplication.shared.windows.first {

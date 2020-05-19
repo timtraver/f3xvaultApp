@@ -30,6 +30,7 @@ func saveSettings(settings: VaultSettings){
     UserDefaults.standard.set( settings.audioPrepTime, forKey: "audioPrepTime")
     UserDefaults.standard.set( settings.audioAnnouncePilots, forKey: "audioAnnouncePilots")
     UserDefaults.standard.set( settings.audioHorn, forKey: "audioHorn")
+    UserDefaults.standard.set( settings.audioHornVolume, forKey: "audioHornVolume")
 
 }
 func getFlag(from countryCode: String) -> String {
@@ -122,6 +123,21 @@ func getPrepTimes() -> [(key: Int, value: String)] {
         1 : "1 Minute",
         2 : "2 Minutes",
         3 : "3 Minutes",
+    ].sorted{$0.key < $1.key}
+}
+func getVolumes() -> [(key: Float, value: String)] {
+    return [
+        0.0 : "0",
+        0.1 : "1",
+        0.2 : "2",
+        0.3 : "3",
+        0.4 : "4",
+        0.5 : "5",
+        0.6 : "6",
+        0.7 : "7",
+        0.8 : "8",
+        0.9 : "9",
+        1.0 : "10",
     ].sorted{$0.key < $1.key}
 }
 

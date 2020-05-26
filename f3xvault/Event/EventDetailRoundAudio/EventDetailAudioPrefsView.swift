@@ -139,8 +139,8 @@ struct EventDetailAudioPrefsView: View {
                             self.settings.audioHorn = self.selectedHorn
                             self.settings.audioHornVolume = self.selectedHornVolume
                             saveSettings(settings: self.settings)
-                            print(self.selectedVoice)
-                            print(self.selectedHornVolume)
+                            // Re-create the audio playlist in case some of the prefs have been changed
+                            self.eventViewModel.createPlaylist()
                             // Now go back to the search screen
                             navigateToEventView( viewName: "EventDetailAudioView", eventViewModel: self.eventViewModel , viewSettings: self.settings)
                             return
@@ -189,7 +189,7 @@ struct EventDetailAudioPrefsView: View {
     }
     
     func previewHorn(_ hornNum: Int){
-        self.player = getPlayer(fileName: self.horns[hornNum].fileName, fileExt: self.horns[hornNum].fileType)
+        self.player = getAudioPlayer(fileName: self.horns[hornNum].fileName, fileExt: self.horns[hornNum].fileType)
         if self.player != nil {
             self.player.delegate = self.del
             self.player.prepareToPlay()

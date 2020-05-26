@@ -240,7 +240,10 @@ struct HomeView: View {
                                 
                                 
                                 Button(action: {
-                                    // Action Here
+                                    // Since they chose to log out, lets set the keep_logged_in setting to false
+                                    self.settings.keep_logged_in = false
+                                    saveSettings(settings: self.settings)
+                                    // Now lets go back to the login page
                                     navigateToView(viewName: "Login", viewSettings: self.settings)
                                     return
                                 }

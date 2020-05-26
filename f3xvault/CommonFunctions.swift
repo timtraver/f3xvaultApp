@@ -13,6 +13,7 @@ import AVFoundation
 
 func saveSettings(settings: VaultSettings){
     // Simple Function to save the UserDefault settings
+    UserDefaults.standard.set( settings.keep_logged_in, forKey: "keep_logged_in")
     UserDefaults.standard.set( settings.user_id, forKey: "user_id")
     UserDefaults.standard.set( settings.user_name, forKey: "user_name")
     UserDefaults.standard.set( settings.user_first_name, forKey: "user_first_name")
@@ -24,14 +25,14 @@ func saveSettings(settings: VaultSettings){
     UserDefaults.standard.set( settings.pilot_city, forKey: "pilot_city")
     UserDefaults.standard.set( settings.country_code, forKey: "country_code")
     UserDefaults.standard.set( settings.state_code, forKey: "state_code")
-
+    // Audio prefernce settings
     UserDefaults.standard.set( settings.audioVoice, forKey: "audioVoice")
     UserDefaults.standard.set( settings.audioLanguage, forKey: "audioLanguage")
     UserDefaults.standard.set( settings.audioPrepTime, forKey: "audioPrepTime")
     UserDefaults.standard.set( settings.audioAnnouncePilots, forKey: "audioAnnouncePilots")
     UserDefaults.standard.set( settings.audioHorn, forKey: "audioHorn")
     UserDefaults.standard.set( settings.audioHornVolume, forKey: "audioHornVolume")
-
+    
 }
 func getFlag(from countryCode: String) -> String {
     return countryCode
@@ -42,6 +43,7 @@ func getFlag(from countryCode: String) -> String {
         .joined()
 }
 
+// Date Functions
 func showDate(dateString: String?) -> String{
     if dateString == "" || dateString == nil {
         return ""
@@ -79,6 +81,29 @@ func isDatePast(dateString: String?) -> Bool{
     return false
 }
 
+// Tim display functions
+func convertSecondsToClockString(seconds: Int) -> String {
+    // Function to take the number of seconds and return the countdown clock format
+    var clockString: String = "0:00"
+    let min = Int( seconds / 60 )
+    let sec = Int( seconds % 60 )
+    if sec < 0 {
+        if abs(sec) < 10 {
+            clockString = "-\(abs(min)):0\(abs(sec))"
+        }else{
+            clockString = "-\(abs(min)):\(abs(sec))"
+        }
+    }else{
+        if sec < 10 {
+            clockString = "\(min):0\(sec)"
+        }else{
+            clockString = "\(min):\(sec)"
+        }
+    }
+    return clockString
+}
+
+// Retrieve comon structured lists
 func getCountries() -> [Country]{
     var countries = [Country]()
     guard let mainUrl = Bundle.main.url(forResource: "Countries", withExtension: "json") else {
@@ -116,14 +141,14 @@ func getLanguages() -> [(key: String, value: String)] {
     return [
         "en" : "English",
         "es" : "Spanish",
-    ].sorted{$0.key < $1.key}
+        ].sorted{$0.key < $1.key}
 }
 func getPrepTimes() -> [(key: Int, value: String)] {
     return [
         1 : "1 Minute",
         2 : "2 Minutes",
         3 : "3 Minutes",
-    ].sorted{$0.key < $1.key}
+        ].sorted{$0.key < $1.key}
 }
 func getVolumes() -> [(key: Float, value: String)] {
     return [
@@ -138,7 +163,7 @@ func getVolumes() -> [(key: Float, value: String)] {
         0.8 : "8",
         0.9 : "9",
         1.0 : "10",
-    ].sorted{$0.key < $1.key}
+        ].sorted{$0.key < $1.key}
 }
 
 // Navigation routines

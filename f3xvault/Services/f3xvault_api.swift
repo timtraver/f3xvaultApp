@@ -8,14 +8,6 @@
 
 import Foundation
 
-//
-//  f3xvault_api.swift
-//  f3xvault
-//
-//  Created by Timothy Traver on 3/28/20.
-//  Copyright © 2020 Timothy Traver. All rights reserved.
-//
-
 class vaultAPI {
     var url: URL!
     var host: String
@@ -41,16 +33,10 @@ class vaultAPI {
         self.method = "GET"
         self.responseString = ""
         self.outputFormat = "json"
-        // Set the login and the password to the stored values if they exist
-        //self.login = UserDefaults.standard.string(forKey: "userLogin") ?? ""
-        //self.password = UserDefaults.standard.string(forKey: "userPassword") ?? ""
+        // Retrieve the user login and password from the keychain
         let keychain = KeychainSwift()
         self.login = keychain.get("userLogin") ?? ""
         self.password = keychain.get("userPassword") ?? ""
-    }
-    
-    func setHeader(name:String, value:String){
-        self.requestHeaders[name] = value
     }
     
     func setRequestVariable(name:String, value:Any){
@@ -71,11 +57,11 @@ class vaultAPI {
         var first = 1
         for (key, value) in requestVariables {
             if first == 1 {
-                self.queryString += "\(key)=\(value)"
                 first = 0
             }else{
-                self.queryString += "&\(key)=\(value)"
+                self.queryString += "&"
             }
+            self.queryString += "\(key)=\(value)"
         }
     }
     func prepareCall() -> URLRequest{
@@ -287,5 +273,3 @@ class vaultAPI {
     }
     
 }
-
-

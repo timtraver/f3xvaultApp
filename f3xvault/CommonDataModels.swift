@@ -6,7 +6,18 @@
 //  Copyright © 2020 Timothy Traver. All rights reserved.
 //
 
+import SwiftUI
 import Foundation
+
+// Run view that does not affect a views content
+struct Run: View {
+    let block: () -> Void
+    
+    var body: some View {
+        DispatchQueue.main.async(execute: block)
+        return AnyView(EmptyView())
+    }
+}
 
 struct Country: Codable, Equatable {
     let name: String
@@ -29,6 +40,7 @@ struct Voice: Codable, Equatable, Identifiable {
 // A class to store the app settings across lots of views
 class VaultSettings: ObservableObject {
     // Currently logged in user
+    @Published var keep_logged_in: Bool
     @Published var user_id: Int
     @Published var user_name: String
     @Published var user_first_name: String
@@ -53,8 +65,9 @@ class VaultSettings: ObservableObject {
     @Published var audioAnnouncePilots: Bool
     @Published var audioHorn: Int
     @Published var audioHornVolume: Float
-
+    
     init(){
+        self.keep_logged_in = UserDefaults.standard.bool( forKey: "keep_logged_in" )
         self.user_id = UserDefaults.standard.integer( forKey: "user_id" )
         self.user_name = UserDefaults.standard.string( forKey: "user_name" ) ?? ""
         self.user_first_name = UserDefaults.standard.string( forKey: "user_first_name" ) ?? ""
@@ -122,8 +135,14 @@ struct playQueueEntry: Identifiable {
     var sequenceID: Int
     var textDescription: String
     var spokenText: String
+    var spokenTextWait: Bool
     var spokenPreDelay: Double
     var spokenPostDelay: Double
+    var spokenTextOnCountdown: String
+    var hasBeginHorn: Bool
+    var beginHornLength: Int
+    var hasEndHorn: Bool
+    var endHornLength: Int
     var hasTimer: Bool
     var timerSeconds: Double
     var timerStart: String
@@ -131,24 +150,35 @@ struct playQueueEntry: Identifiable {
     var timerLastTen: Bool
     var timerLastThirty: Bool
     var timerEveryFifteen: Bool
+    var timerEveryThirty: Bool
+    var timerEveryTenInLastMinute: Bool
     var timerEveryMinute: Bool
-    var hornLength:Int
-    
+    var hornLength: Int
+    var rowColor: Bool
     init(){
         self.sequenceID = 0
         self.textDescription = ""
         self.spokenText = ""
+        self.spokenTextWait = true
         self.spokenPreDelay = 0.0
         self.spokenPostDelay = 0.0
+        self.spokenTextOnCountdown = ""
+        self.hasBeginHorn = false
+        self.beginHornLength = 2
+        self.hasEndHorn = false
+        self.endHornLength = 2
         self.hasTimer = false
         self.timerSeconds = 0.0
         self.timerStart = ""
-        self.timerCountdownToStart = true
+        self.timerCountdownToStart = false
         self.timerLastTen = true
-        self.timerLastThirty = true
-        self.timerEveryFifteen = true
-        self.timerEveryMinute = true
+        self.timerLastThirty = false
+        self.timerEveryFifteen = false
+        self.timerEveryThirty = false
+        self.timerEveryTenInLastMinute = false
+        self.timerEveryMinute = false
         self.hornLength = 2
+        self.rowColor = false
     }
     
 }
@@ -263,21 +293,21 @@ class FlightDescriptions{
             "description" : "F3k Task M... Huge ladder... Three flights only... Three minute, five minute, and seven minute flights in order... All time achieved counts... Fifteen minute working window.",
             "window" : "900",
         ]
-
+        
         // F3J flight types
         self.flights["f3j_duration"] = [
             "name" : "F3J Duration",
             "description" : "F3j Duration with precision landing... Ten minute working window.",
             "window" : "600",
         ]
-
+        
         // F5J flight types
         self.flights["f5j_duration"] = [
             "name" : "F5J Electric Duration",
             "description" : "F5j Electric duration with precision landing... Ten minute working window.",
             "window" : "600",
         ]
-
+        
         // GPS flight types
         self.flights["gps_distance"] = [
             "name" : "GPS Triangle Distance",
@@ -289,6 +319,6 @@ class FlightDescriptions{
             "description" : "GPS Triangle speed... Fastest lap around GPS triangle... Five minute window.",
             "window" : "300",
         ]
-
+        
     }
 }

@@ -63,55 +63,8 @@ struct LoginView: View {
                         .frame(height: 20)
                     
                     Button(action: {
-                        // Check to see if they are using the same user to log in, and don't both to make the call
-                        if self.login == self.settings.user_name && self.settings.user_name != "" {
-                            // The login is the same, so lets just go home
-                            navigateToView(viewName: "Home", viewSettings: self.settings)
-                            return
-                        }
-                        // Perform the login and wait for the response to see if they can log in
-                        // Turn on the network indicator
-                        self.networkIndicator.toggle()
-                        // Create an instance of the API
-                        let call = vaultAPI()
-                        // Make the API call to check the user entered
-                        call.checkUser(login: self.login, password: self.password ) { results in
-                            switch results {
-                            case .success(let user):
-                                if user.response_code == 0 {
-                                    self.alertMessage = "Login Failed \(user.error_string)"
-                                    self.password = ""
-                                    self.showingAlert = true
-                                    self.keychain.set(self.login, forKey: "userLogin")
-                                    self.keychain.set("", forKey: "userPassword")
-                                }
-                                if user.response_code == 1 {
-                                    self.alertMessage = "Login Succeeded \(user.user?.user_first_name ?? "")"
-                                    self.keychain.set(self.login, forKey: "userLogin")
-                                    self.keychain.set(self.password, forKey: "userPassword")
-                                    // Save the desired non critical information about the user
-                                    self.settings.user_id = user.user?.user_id ?? 0
-                                    self.settings.user_name = user.user?.user_name ?? ""
-                                    self.settings.user_first_name = user.user?.user_first_name ?? ""
-                                    self.settings.user_last_name = user.user?.user_last_name ?? ""
-                                    self.settings.pilot_id = user.user?.pilot_id ?? 0
-                                    self.settings.pilot_ama = user.user?.pilot_ama ?? ""
-                                    self.settings.pilot_fai = user.user?.pilot_fai ?? ""
-                                    self.settings.pilot_fai_license = user.user?.pilot_fai_license ?? ""
-                                    self.settings.pilot_city = user.user?.pilot_city ?? ""
-                                    self.settings.country_code = user.user?.country_code ?? ""
-                                    self.settings.state_code = user.user?.state_code ?? ""
-                                    // Save the new settings to the UserDefaults
-                                    saveSettings(settings: self.settings)
-                                    navigateToView(viewName: "Home", viewSettings: self.settings)
-                                }
-                            case .failure(let error):
-                                self.alertMessage = "Dude, we got an error! \(error)"
-                                self.showingAlert = true
-                            }
-                            self.networkIndicator.toggle()
-                            return
-                        }
+                        self.loginToSystem()
+                        return
                     }
                     ) {
                         HStack{
@@ -145,18 +98,19 @@ struct LoginView: View {
                     )
                     
                     Spacer()
-                        .frame(height: 20)
+                        .frame(height: 15)
                     
                     Text("Or")
                         .fontWeight(.semibold)
                         .foregroundColor(Color.white)
                     
                     Spacer()
-                        .frame(height: 20)
+                        .frame(height: 15)
                     
                     Button(action: {
                         // Basically Navigate to the home view without a login
                         // Make the settings have those zeroed out values too
+                        self.settings.keep_logged_in = false
                         self.settings.user_id = 0
                         self.settings.user_name = ""
                         self.settings.user_first_name = "Guest"
@@ -189,11 +143,26 @@ struct LoginView: View {
                             .stroke(Color.white, lineWidth: 5)
                     )
                     
+                    
+                    
                 }
                 .alert(isPresented: $showingAlert) {
                     Alert(title: Text("Login Error"), message: Text( "\(alertMessage)"), dismissButton: .default(Text("Try Again")))
                 }
                 
+                Button(action: {
+                    // code for the button
+                    self.settings.keep_logged_in.toggle()
+                    return
+                }) {
+                    HStack{
+                        Image(systemName: self.settings.keep_logged_in ? "checkmark.square" : "square")
+                        Text("keep me Logged In")
+                    }
+                    .foregroundColor(Color.white)
+
+                }
+
                 Spacer()
                 
                 // Print out the Copyright
@@ -210,6 +179,64 @@ struct LoginView: View {
         // Function to load the user name and password from the keychain
         self.login = keychain.get("userLogin") ?? ""
         self.password = keychain.get("userPassword") ?? ""
+        if self.settings.keep_logged_in == true {
+            self.loginToSystem()
+        }
+    }
+    
+    func loginToSystem(){
+        // Function to do the login, asve the data and go to the home screen
+        // Check to see if they are using the same user to log in, and don't both to make the call
+        if self.login == self.settings.user_name && self.settings.user_name != "" {
+            // Lets save the defult settings to see if they chose to stay logged in
+            saveSettings(settings: self.settings)
+            // The login is the same, so lets just go home
+            navigateToView(viewName: "Home", viewSettings: self.settings)
+            return
+        }
+        // Perform the login and wait for the response to see if they can log in
+        // Turn on the network indicator
+        self.networkIndicator.toggle()
+        // Create an instance of the API
+        let call = vaultAPI()
+        // Make the API call to check the user entered
+        call.checkUser(login: self.login, password: self.password ) { results in
+            switch results {
+            case .success(let user):
+                if user.response_code == 0 {
+                    self.alertMessage = "Login Failed \(user.error_string)"
+                    self.password = ""
+                    self.showingAlert = true
+                    self.keychain.set(self.login, forKey: "userLogin")
+                    self.keychain.set("", forKey: "userPassword")
+                }
+                if user.response_code == 1 {
+                    self.alertMessage = "Login Succeeded \(user.user?.user_first_name ?? "")"
+                    self.keychain.set(self.login, forKey: "userLogin")
+                    self.keychain.set(self.password, forKey: "userPassword")
+                    // Save the desired non critical information about the user
+                    self.settings.user_id = user.user?.user_id ?? 0
+                    self.settings.user_name = user.user?.user_name ?? ""
+                    self.settings.user_first_name = user.user?.user_first_name ?? ""
+                    self.settings.user_last_name = user.user?.user_last_name ?? ""
+                    self.settings.pilot_id = user.user?.pilot_id ?? 0
+                    self.settings.pilot_ama = user.user?.pilot_ama ?? ""
+                    self.settings.pilot_fai = user.user?.pilot_fai ?? ""
+                    self.settings.pilot_fai_license = user.user?.pilot_fai_license ?? ""
+                    self.settings.pilot_city = user.user?.pilot_city ?? ""
+                    self.settings.country_code = user.user?.country_code ?? ""
+                    self.settings.state_code = user.user?.state_code ?? ""
+                    // Save the new settings to the UserDefaults
+                    saveSettings(settings: self.settings)
+                    navigateToView(viewName: "Home", viewSettings: self.settings)
+                }
+            case .failure(let error):
+                self.alertMessage = "Dude, we got an error! \(error)"
+                self.showingAlert = true
+            }
+            self.networkIndicator.toggle()
+
+        }
     }
     
 }

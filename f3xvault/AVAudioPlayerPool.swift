@@ -23,20 +23,20 @@ class AVAudioPlayerPool: NSObject {
 
         // If we found one, return it
         if let playerToUse = availablePlayers.first {
-            print("Reusing player for \(url.lastPathComponent)")
+            //print("Reusing player for \(url.lastPathComponent)")
             return playerToUse
         }
 
         // Didn't find one? Create a new one
         let newPlayer = try! AVAudioPlayer( contentsOf: url )
-        print("Creating new player for url \(url.lastPathComponent)")
+        //print("Creating new player for url \(url.lastPathComponent)")
         players.append(newPlayer)
         return newPlayer
     }
 
 }
 
-func getPlayer( fileName: String, fileExt: String ) -> AVAudioPlayer? {
+func getAudioPlayer( fileName: String, fileExt: String ) -> AVAudioPlayer? {
     // Wrapper Function to get an audio player from the pool of players by just sending the filename and type
     guard let path = Bundle.main.path(forResource: fileName, ofType: fileExt) else { return nil }
     let url = URL(fileURLWithPath: path)

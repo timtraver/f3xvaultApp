@@ -175,6 +175,7 @@ class EventDetailViewModel: ObservableObject {
                     tempEntry.spokenTextOnCountdown = "remaining in prep time."
                     tempEntry.hasTimer = true
                     tempEntry.hasBeginHorn = true
+                    tempEntry.beginHornLength = 1
                     tempEntry.timerSeconds = Double( prepTime * 60 )
                     tempEntry.timerEveryFifteen = true
                     tempEntry.timerEveryThirty = true
@@ -197,11 +198,18 @@ class EventDetailViewModel: ObservableObject {
                         tempEntry.spokenPreDelay = 2.0
                         tempEntry.spokenTextWait = false
                         tempEntry.spokenTextOnCountdown = "remaining before launch window"
+                        tempEntry.hasBeginHorn = true
+                        tempEntry.beginHornLength = 1
                         tempEntry.hasTimer = true
                         tempEntry.timerSeconds = 60
                         tempEntry.timerEveryFifteen = true
                         tempEntry.timerLastTen = true
                         tempEntry.hasEndHorn = true
+                        if loops > 1 {
+                            tempEntry.endHornLength = 3
+                        }else{
+                            tempEntry.endHornLength = 2
+                        }
                         rowColor.toggle()
                         tempEntry.rowColor = rowColor
                         playList.append(tempEntry)
@@ -222,6 +230,7 @@ class EventDetailViewModel: ObservableObject {
                         tempEntry.timerLastThirty = true
                         tempEntry.timerEveryTenInLastMinute = true
                         tempEntry.hasEndHorn = true
+                        tempEntry.endHornLength = 2
                         rowColor.toggle()
                         tempEntry.rowColor = rowColor
                         playList.append(tempEntry)
@@ -240,6 +249,7 @@ class EventDetailViewModel: ObservableObject {
                         tempEntry.timerEveryTenInLastMinute = true
                         tempEntry.timerLastTen = true
                         tempEntry.hasEndHorn = true
+                        tempEntry.endHornLength = 1
                         rowColor.toggle()
                         tempEntry.rowColor = rowColor
                         playList.append(tempEntry)

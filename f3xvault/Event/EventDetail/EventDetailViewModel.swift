@@ -108,8 +108,21 @@ class EventDetailViewModel: ObservableObject {
                 let taskInfo: [String:String] = getTaskDescription(round: round.round_number)
                 let prepTime: Int = UserDefaults.standard.integer( forKey: "audioPrepTime" )
                 let announcePilots: Bool = UserDefaults.standard.bool( forKey: "audioAnnouncePilots" )
+                let roundType = round.flight_type_name
                 
                 for group in groups {
+                    // Get the pilot list for this group
+                    let pilotList = getPilotList(round: round.round_number, group: group)
+                    
+                    // Skip this group if there is no flight for it in the draw
+                    var groupInRound: Bool = false
+                    for flight in round.flights {
+                        if group == flight.group {
+                            groupInRound = true
+                        }
+                    }
+                    if !groupInRound { continue } // If the group is not in this round, then skip it
+                    
                     // Add the Round header entry
                     tempEntry = playQueueEntry()
                     tempEntry.sequenceID = sequence
@@ -126,7 +139,7 @@ class EventDetailViewModel: ObservableObject {
                     tempEntry.textDescription = taskInfo["name"] ?? ""
                     tempEntry.spokenText = taskInfo["description"] ?? ""
                     // Add the prep time notice if they don't want to announce pilots
-                    if announcePilots == false {
+                    if announcePilots == false || pilotList.count == 0 {
                         tempEntry.spokenText += "...Preparation Time of \(prepTime) minutes starts in...5...4...3...2...1..."
                     }
                     tempEntry.spokenTextWait = true
@@ -135,11 +148,11 @@ class EventDetailViewModel: ObservableObject {
                     playList.append(tempEntry)
                     sequence += 1
                     //Add pilot list entry if wanted
-                    if announcePilots == true {
+                    
+                    if announcePilots == true && pilotList.count > 0 {
                         tempEntry = playQueueEntry()
                         tempEntry.sequenceID = sequence
                         tempEntry.textDescription = "Group \(group) Pilot List"
-                        let pilotList = getPilotList(round: round.round_number, group: group)
                         tempEntry.spokenText = "Group \(group)... pilot list: "
                         for pilot in pilotList {
                             tempEntry.spokenText += "\(pilot),"
@@ -158,8 +171,10 @@ class EventDetailViewModel: ObservableObject {
                     tempEntry.textDescription = "\(convertSecondsToClockString(seconds: prepTime * 60)) Preparation Time"
                     tempEntry.spokenText = "\(prepTime) minutes remaining in prep time."
                     tempEntry.spokenTextWait = false
+                    tempEntry.spokenPreDelay = 3.0
                     tempEntry.spokenTextOnCountdown = "remaining in prep time."
                     tempEntry.hasTimer = true
+                    tempEntry.hasBeginHorn = true
                     tempEntry.timerSeconds = Double( prepTime * 60 )
                     tempEntry.timerEveryFifteen = true
                     tempEntry.timerEveryThirty = true
@@ -168,60 +183,68 @@ class EventDetailViewModel: ObservableObject {
                     playList.append(tempEntry)
                     sequence += 1
                     
-                    // Add the 1 minute no fly time
-                    tempEntry = playQueueEntry()
-                    tempEntry.sequenceID = sequence
-                    tempEntry.textDescription = "1:00 No Fly Time"
-                    tempEntry.spokenText = "1 Minute no fly time before launch window"
-                    tempEntry.spokenTextWait = false
-                    tempEntry.spokenTextOnCountdown = "remaining before launch window"
-                    tempEntry.hasTimer = true
-                    tempEntry.timerSeconds = 60
-                    tempEntry.timerEveryFifteen = true
-                    tempEntry.timerLastTen = true
-                    tempEntry.hasEndHorn = true
-                    rowColor.toggle()
-                    tempEntry.rowColor = rowColor
-                    playList.append(tempEntry)
-                    sequence += 1
-                    
-                    // Add the window time entry
-                    tempEntry = playQueueEntry()
-                    tempEntry.sequenceID = sequence
-                    let windowTime = Int( taskInfo["window"]! )
-                    tempEntry.textDescription = "\(convertSecondsToClockString(seconds: windowTime!)) Flight Window"
-                    tempEntry.spokenText = ""
-                    tempEntry.hasBeginHorn = false
-                    tempEntry.hasTimer = true
-                    tempEntry.timerSeconds = Double(windowTime ?? 0)
-                    tempEntry.timerEveryMinute = true
-                    tempEntry.timerEveryThirty = true
-                    tempEntry.timerLastTen = true
-                    tempEntry.timerLastThirty = true
-                    tempEntry.timerEveryTenInLastMinute = true
-                    tempEntry.hasEndHorn = true
-                    rowColor.toggle()
-                    tempEntry.rowColor = rowColor
-                    playList.append(tempEntry)
-                    sequence += 1
-                    
-                    // Add the landing window entry
-                    tempEntry = playQueueEntry()
-                    tempEntry.sequenceID = sequence
-                    tempEntry.textDescription = "30 Second Landing window"
-                    tempEntry.spokenText = "30 Second landing window"
-                    tempEntry.spokenPreDelay = 2.0
-                    tempEntry.spokenTextWait = false
-                    tempEntry.spokenTextOnCountdown = "in landing window"
-                    tempEntry.hasTimer = true
-                    tempEntry.timerSeconds = 30.0
-                    tempEntry.timerEveryTenInLastMinute = true
-                    tempEntry.timerLastTen = true
-                    tempEntry.hasEndHorn = true
-                    rowColor.toggle()
-                    tempEntry.rowColor = rowColor
-                    playList.append(tempEntry)
-                    sequence += 1
+                    // Check to see if it is f3k all up, which has X number of flights and loop through them
+                    var loops: Int = 1
+                    if roundType == "f3k_c" { loops = 3 }
+                    if roundType == "f3k_c2" { loops = 4 }
+                    if roundType == "f3k_c3" { loops = 5 }
+                    for _ in 1...loops {
+                        // Add the 1 minute no fly time
+                        tempEntry = playQueueEntry()
+                        tempEntry.sequenceID = sequence
+                        tempEntry.textDescription = "1:00 No Fly Time"
+                        tempEntry.spokenText = "1 Minute no fly time before launch window"
+                        tempEntry.spokenPreDelay = 2.0
+                        tempEntry.spokenTextWait = false
+                        tempEntry.spokenTextOnCountdown = "remaining before launch window"
+                        tempEntry.hasTimer = true
+                        tempEntry.timerSeconds = 60
+                        tempEntry.timerEveryFifteen = true
+                        tempEntry.timerLastTen = true
+                        tempEntry.hasEndHorn = true
+                        rowColor.toggle()
+                        tempEntry.rowColor = rowColor
+                        playList.append(tempEntry)
+                        sequence += 1
+                        
+                        // Add the window time entry
+                        tempEntry = playQueueEntry()
+                        tempEntry.sequenceID = sequence
+                        let windowTime = Int( taskInfo["window"]! )
+                        tempEntry.textDescription = "\(convertSecondsToClockString(seconds: windowTime!)) Flight Window"
+                        tempEntry.spokenText = ""
+                        tempEntry.hasBeginHorn = false
+                        tempEntry.hasTimer = true
+                        tempEntry.timerSeconds = Double(windowTime ?? 0)
+                        tempEntry.timerEveryMinute = true
+                        tempEntry.timerEveryThirty = true
+                        tempEntry.timerLastTen = true
+                        tempEntry.timerLastThirty = true
+                        tempEntry.timerEveryTenInLastMinute = true
+                        tempEntry.hasEndHorn = true
+                        rowColor.toggle()
+                        tempEntry.rowColor = rowColor
+                        playList.append(tempEntry)
+                        sequence += 1
+                        
+                        // Add the landing window entry
+                        tempEntry = playQueueEntry()
+                        tempEntry.sequenceID = sequence
+                        tempEntry.textDescription = "30 Second Landing window"
+                        tempEntry.spokenText = "30 Second landing window"
+                        tempEntry.spokenPreDelay = 2.0
+                        tempEntry.spokenTextWait = false
+                        tempEntry.spokenTextOnCountdown = "in landing window"
+                        tempEntry.hasTimer = true
+                        tempEntry.timerSeconds = 30.0
+                        tempEntry.timerEveryTenInLastMinute = true
+                        tempEntry.timerLastTen = true
+                        tempEntry.hasEndHorn = true
+                        rowColor.toggle()
+                        tempEntry.rowColor = rowColor
+                        playList.append(tempEntry)
+                        sequence += 1
+                    } // end of for loop of windows
                     
                     // 10 second round separation
                     tempEntry = playQueueEntry()
@@ -238,19 +261,31 @@ class EventDetailViewModel: ObservableObject {
                     
                 }
             }
+            // Create playlist entry for end of contest
+            tempEntry = playQueueEntry()
+            tempEntry.sequenceID = sequence
+            tempEntry.textDescription = "End of contest."
+            tempEntry.spokenText = "End of contest. Thank you for flying with us. Have a nice day."
+            rowColor.toggle()
+            tempEntry.rowColor = rowColor
+            playList.append(tempEntry)
         }
+        
+        // assign the formed playlist
         self.playListQueue = playList
+
         return
     }
     
     private func getRounds() -> [EventRound]{
-        // Function to create the arrat of rounds so it is easier to create the queue list
+        // Function to create the array of rounds so it is easier to create the queue list
         var rounds: [EventRound]! = []
         let roundNumbers = self.getNumRounds()
         if roundNumbers.count > 0 {
             for round_num in roundNumbers {
                 var tempRound = EventRound()
                 tempRound.round_number = round_num
+                // Determine if there are rounds set up in the preliminary standings
                 for pilot in self.eventInfo.event.prelim_standings.standings {
                     for round in pilot.rounds {
                         if round.round_number == round_num {
@@ -263,6 +298,18 @@ class EventDetailViewModel: ObservableObject {
                                 tempFlight.pilot_last_name = pilot.pilot_last_name
                                 tempRound.flights.append(tempFlight)
                             }
+                        }
+                    }
+                }
+                // Check if the round wasn't found in the prelims that it might be in the tasks
+                if tempRound.flight_type_name == "" {
+                    for task in self.eventInfo.event.tasks {
+                        if task.round_number == tempRound.round_number {
+                            var tempFlight = EventRoundFlight()
+                            tempRound.flight_type_name = task.flight_type_code
+                            tempFlight.flight_type_code = task.flight_type_code
+                            tempFlight.group = "A"
+                            tempRound.flights.append(tempFlight)
                         }
                     }
                 }
@@ -290,11 +337,15 @@ class EventDetailViewModel: ObservableObject {
         for pilot in self.eventInfo.event.prelim_standings.standings {
             for round in pilot.rounds {
                 for flight in round.flights {
-                    if !groups.contains(flight.flight_group) {
-                        groups.append(flight.flight_group)
+                    if !groups.contains( flight.flight_group ) {
+                        groups.append( flight.flight_group )
                     }
                 }
             }
+        }
+        // If there are no groups, then just set one
+        if groups.count == 0 {
+            groups.append("A")
         }
         groups.sort()
         return groups
@@ -305,9 +356,15 @@ class EventDetailViewModel: ObservableObject {
         // Step through the standings and determine the rounds
         for pilot in self.eventInfo.event.prelim_standings.standings {
             for round in pilot.rounds {
-                if !rounds.contains(round.round_number) {
-                    rounds.append(round.round_number)
+                if !rounds.contains( round.round_number ) {
+                    rounds.append( round.round_number )
                 }
+            }
+        }
+        // See if there are flyoff rounds that are not in the standings yet but are in the tasks
+        for task in self.eventInfo.event.tasks {
+            if !rounds.contains( task.round_number ) {
+                rounds.append( task.round_number )
             }
         }
         rounds.sort()

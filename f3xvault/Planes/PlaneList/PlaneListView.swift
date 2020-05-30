@@ -49,6 +49,7 @@ struct PlaneListView: View {
                                 Text(String(self.calcRecords) + " of " + String(self.totalRecords))
                                     .font(.system(size: 10))
                             }
+                            .padding(.bottom, 8)
                         }
                         .frame(height: 25)
                         .padding(.trailing, 5)

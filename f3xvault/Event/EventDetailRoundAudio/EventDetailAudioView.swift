@@ -271,8 +271,8 @@ struct EventDetailAudioView: View {
                                             Text("   ")
                                         }
                                         Text("\(queue.textDescription)")
-                                            .fontWeight( queue.textDescription.contains("Round") ? .bold : .regular)
-                                            .foregroundColor(Color(queue.textDescription.contains("Round") ? .black : .systemBlue))
+                                            .fontWeight( queue.textDescription.contains("Round") || queue.textDescription.contains("Flight Window") ? .bold : .regular )
+                                            .foregroundColor(Color( queue.textDescription.contains("Round") ? .black : .systemBlue ) )
                                         
                                         Spacer()
                                     }
@@ -318,9 +318,22 @@ struct EventDetailAudioView: View {
     func catchSpeechNotification( notification: Notification ) {
         let queueNum = ( notification.userInfo!["queueNum"] as! NSString ).integerValue
         if queueNum == self.currentQueueEntry {
-            self.currentQueueEntry += 1
-            self.goToNextQueueEntry = true
+            if self.currentQueueEntry == self.eventViewModel.playListQueue.count - 1 {
+                // reached the end of the playList, so lets stop everything
+                self.queueTimerRunning = false
+                self.clockTimerRunning = false
+                self.synth.stopSpeaking()
+                self.soundPlayer?.stop()
+                self.soundPlayer?.currentTime = 0
+                self.queueTimer.upstream.connect().cancel()  // Stop the queue Timer object to not waste cycles
+                self.clockTimer.upstream.connect().cancel()  // Stop the clock Timer object to not waste cycles
+                self.goToNextQueueEntry = false
+            }else{
+                self.currentQueueEntry += 1
+                self.goToNextQueueEntry = true
+            }
         }
+        return
     }
     func updateClockText( screenWidth: CGFloat ){
         let currentSeconds = Int( ceil( self.clockCurrentSeconds ) )
@@ -330,6 +343,7 @@ struct EventDetailAudioView: View {
         if self.clockOldSeconds != currentSeconds {  // This is to prevent it from saying duplicates because the clock time is 0.1
             // Set a boolean on whether or not to accounce the time
             var speak: Bool = false
+            var speakSpeed: Double = 0.5
             
             if self.eventViewModel.playListQueue[self.currentQueueEntry].timerLastTen && currentSeconds <= 10 { speak = true }
             if self.eventViewModel.playListQueue[self.currentQueueEntry].timerLastThirty && currentSeconds <= 30 { speak = true }
@@ -367,7 +381,12 @@ struct EventDetailAudioView: View {
                 if self.eventViewModel.playListQueue[self.currentQueueEntry].spokenTextOnCountdown != "" && currentSeconds >= 15 {
                     speakText += " \(self.eventViewModel.playListQueue[self.currentQueueEntry].spokenTextOnCountdown)"
                 }
-                self.synth.speak("\(speakText)", false, 0 )
+                // Lets increase the speaking speed if they are counting down the last thirty
+                if self.eventViewModel.playListQueue[self.currentQueueEntry].timerLastThirty && currentSeconds <= 30 {
+                    speakSpeed = 0.6
+                }
+                
+                self.synth.speak("\(speakText)", false, 0, speakSpeed )
             }
         }
         self.clockOldSeconds = currentSeconds
@@ -376,7 +395,6 @@ struct EventDetailAudioView: View {
         // Function to start and stop the main queue running
         // Disable the app from sleeping during the timers running
         UIApplication.shared.isIdleTimerDisabled = true
-        print(self.clockTimerRunning)
         if self.queueTimerRunning == true {
             // pause the timer and queue and any voice synthesizer or sound
             self.queueTimerRunning = false
@@ -471,7 +489,7 @@ struct EventDetailAudioView: View {
         // If the entry has some speech, then call the speech synthesizer
         if self.eventViewModel.playListQueue[entry].spokenText != "" {
             self.synth.voice = self.settings.audioVoice
-            self.synth.speak(self.eventViewModel.playListQueue[entry].spokenText, self.eventViewModel.playListQueue[entry].spokenTextWait ,self.currentQueueEntry, self.eventViewModel.playListQueue[entry].spokenPreDelay, self.eventViewModel.playListQueue[entry].spokenPostDelay)
+            self.synth.speak(self.eventViewModel.playListQueue[entry].spokenText, self.eventViewModel.playListQueue[entry].spokenTextWait ,self.currentQueueEntry, 0.5, self.eventViewModel.playListQueue[entry].spokenPreDelay, self.eventViewModel.playListQueue[entry].spokenPostDelay)
         }
         return
     }
@@ -504,12 +522,12 @@ class SpeechSynthesizer: NSObject {
         synthesizer.delegate = self
     }
     
-    func speak(_ item: String, _ sendNotification: Bool, _ queueNumber: Int, _ pauseBefore: Double = 0.0, _ pauseAfter: Double = 0.0 ){
+    func speak(_ item: String, _ sendNotification: Bool, _ queueNumber: Int, _ speakSpeed: Double = 0.5, _ pauseBefore: Double = 0.0, _ pauseAfter: Double = 0.0 ){
         self.queueNumber = queueNumber
         self.sendNotification = sendNotification
         let speechUtterance = AVSpeechUtterance( string: item )
         speechUtterance.voice = AVSpeechSynthesisVoice( identifier: self.voice )
-        speechUtterance.rate = 0.5
+        speechUtterance.rate = Float( speakSpeed )
         speechUtterance.preUtteranceDelay = pauseBefore
         speechUtterance.postUtteranceDelay = pauseAfter
         self.synthesizer.speak( speechUtterance )

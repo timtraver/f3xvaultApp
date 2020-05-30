@@ -216,17 +216,17 @@ class FlightDescriptions{
         self.flights["f3k_c"] = [
             "name" : "F3K Task C - All Up 3 x 3:00",
             "description" : "F3k Task C... All up last down... Single launch... Maximum three minutes. Three three minute working windows. Must launch before three second start signal ends.",
-            "window" : "180",
+            "window" : "183",
         ]
         self.flights["f3k_c2"] = [
             "name" : "F3K Task C - All Up 4 x 3:00",
             "description" : "F3k Task C... All up last down... Single launch... Maximum three minutes. Four three minute working windows. Must launch before three second start signal ends.",
-            "window" : "180",
+            "window" : "183",
         ]
         self.flights["f3k_c3"] = [
             "name" : "F3K Task C - All Up 5 x 3:00",
             "description" : "F3k Task C... All up last down... Single launch... Maximum three minutes. Five three minute working windows. Must launch before three second start signal ends.",
-            "window" : "180",
+            "window" : "183",
         ]
         self.flights["f3k_d"] = [
             "name" : "F3K Task D - Ladder",

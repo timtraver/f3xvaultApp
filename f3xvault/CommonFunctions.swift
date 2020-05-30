@@ -122,10 +122,11 @@ func getCountries() -> [Country]{
 }
 func getHorns() -> [Horn]{
     var horns = [Horn]()
-    horns.append( Horn( id: 0, fileName: "airhorn1", fileType: "wav", description: "Air Horn 1" ) )
-    horns.append( Horn( id: 1, fileName: "airhorn2", fileType: "wav", description: "Air Horn 2" ) )
-    horns.append( Horn( id: 2, fileName: "epichorn", fileType: "wav", description: "Epic Horn 1" ) )
+    horns.append( Horn( id: 0, fileName: "air", fileType: "wav", description: "Air Horn 1" ) )
+    horns.append( Horn( id: 1, fileName: "sportsarena", fileType: "wav", description: "Sports Arena" ) )
+    horns.append( Horn( id: 2, fileName: "ship", fileType: "wav", description: "Ship Horn" ) )
     horns.append( Horn( id: 3, fileName: "inception", fileType: "wav", description: "Inception Horn" ) )
+    horns.append( Horn( id: 4, fileName: "epic", fileType: "wav", description: "Epic Horn" ) )
     return horns
 }
 func getVoices() -> [Voice]{

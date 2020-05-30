@@ -135,7 +135,7 @@ struct EventDetailAudioView: View {
                                         if self.queueTimerRunning {
                                             if self.eventViewModel.playListQueue[self.currentQueueEntry].hasEndHorn {
                                                 // Fire off an end horn
-                                                self.playHorn()
+                                                self.playHorn(length: self.eventViewModel.playListQueue[self.currentQueueEntry].endHornLength)
                                             }
                                             self.currentQueueEntry += 1
                                             self.goToNextQueueEntry = true
@@ -474,7 +474,7 @@ struct EventDetailAudioView: View {
         // Play a beginning horn if needed
         if self.eventViewModel.playListQueue[entry].hasBeginHorn {
             // play horn
-            self.playHorn()
+            self.playHorn(length: self.eventViewModel.playListQueue[entry].beginHornLength)
         }
         
         // If the entry has a timer, then set the current timer value and restart the timer
@@ -493,8 +493,9 @@ struct EventDetailAudioView: View {
         }
         return
     }
-    func playHorn(){
-        self.soundPlayer = getAudioPlayer( fileName: self.horns[UserDefaults.standard.integer( forKey: "audioHorn" )].fileName, fileExt: self.horns[UserDefaults.standard.integer( forKey: "audioHorn" )].fileType )
+    func playHorn(length: Int = 2){
+        let fileName = self.horns[UserDefaults.standard.integer( forKey: "audioHorn" )].fileName + "_\(length)"
+        self.soundPlayer = getAudioPlayer( fileName: fileName, fileExt: self.horns[UserDefaults.standard.integer( forKey: "audioHorn" )].fileType )
         if self.soundPlayer != nil {
             self.soundPlayer.delegate = self.soundDelegate
             self.soundPlayer.prepareToPlay()

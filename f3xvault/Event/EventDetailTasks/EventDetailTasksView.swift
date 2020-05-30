@@ -96,7 +96,7 @@ struct EventDetailTasksView: View {
                         }.padding(1.0)
                     }
                     
-                    if self.eventViewModel.eventInfo.event.event_type_code == "f3k" || self.eventViewModel.eventInfo.event.event_type_code == "f3j" || self.eventViewModel.eventInfo.event.event_type_code == "f5j" || self.eventViewModel.eventInfo.event.event_type_code == "td" || self.eventViewModel.eventInfo.event.event_type_code == "gps" || self.eventViewModel.eventInfo.event.event_type_code == "f5j" {
+                    if self.eventViewModel.eventInfo.event.event_type_code == "f3k" || self.eventViewModel.eventInfo.event.event_type_code == "f3j" || self.eventViewModel.eventInfo.event.event_type_code == "f5j" {
                         // Button to go to timing screen
                         Button(action: {
                             //action to go to round audio playlist

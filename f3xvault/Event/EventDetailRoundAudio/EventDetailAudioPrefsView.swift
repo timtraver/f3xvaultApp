@@ -189,7 +189,7 @@ struct EventDetailAudioPrefsView: View {
     }
     
     func previewHorn(_ hornNum: Int){
-        self.player = getAudioPlayer(fileName: self.horns[hornNum].fileName, fileExt: self.horns[hornNum].fileType)
+        self.player = getAudioPlayer(fileName: self.horns[hornNum].fileName + "_2", fileExt: self.horns[hornNum].fileType)
         if self.player != nil {
             self.player.delegate = self.del
             self.player.prepareToPlay()

@@ -108,12 +108,18 @@ class EventDetailViewModel: ObservableObject {
                 let taskInfo: [String:String] = getTaskDescription(round: round.round_number)
                 let prepTime: Int = UserDefaults.standard.integer( forKey: "audioPrepTime" )
                 let announcePilots: Bool = UserDefaults.standard.bool( forKey: "audioAnnouncePilots" )
+                let noFlyTime: Bool = UserDefaults.standard.bool( forKey: "audioNoFlyTime" )
                 let roundType = round.flight_type_name
-                
+                // Check to see if it is f3k all up, which has X number of flights and loop through them
+                var loops: Int = 1
+                if roundType == "f3k_c" { loops = 3 }
+                if roundType == "f3k_c2" { loops = 4 }
+                if roundType == "f3k_c3" { loops = 5 }
+
                 for group in groups {
                     // Get the pilot list for this group
                     let pilotList = getPilotList(round: round.round_number, group: group)
-                    
+
                     // Skip this group if there is no flight for it in the draw
                     var groupInRound: Bool = false
                     for flight in round.flights {
@@ -172,54 +178,69 @@ class EventDetailViewModel: ObservableObject {
                     tempEntry.spokenText = "\(prepTime) minutes remaining in prep time."
                     tempEntry.spokenTextWait = false
                     tempEntry.spokenPreDelay = 3.0
-                    tempEntry.spokenTextOnCountdown = "remaining in prep time."
+                    if noFlyTime {
+                        tempEntry.spokenTextOnCountdown = "remaining before no fly window."
+                    }else{
+                        tempEntry.spokenTextOnCountdown = "remaining before launch window."
+                    }
                     tempEntry.hasTimer = true
                     tempEntry.hasBeginHorn = true
                     tempEntry.beginHornLength = 1
                     tempEntry.timerSeconds = Double( prepTime * 60 )
                     tempEntry.timerEveryFifteen = true
                     tempEntry.timerEveryThirty = true
-                    rowColor.toggle()
-                    tempEntry.rowColor = rowColor
-                    playList.append(tempEntry)
-                    sequence += 1
-                    
-                    // Check to see if it is f3k all up, which has X number of flights and loop through them
-                    var loops: Int = 1
-                    if roundType == "f3k_c" { loops = 3 }
-                    if roundType == "f3k_c2" { loops = 4 }
-                    if roundType == "f3k_c3" { loops = 5 }
-                    for _ in 1...loops {
-                        // Add the 1 minute no fly time
-                        tempEntry = playQueueEntry()
-                        tempEntry.sequenceID = sequence
-                        tempEntry.textDescription = "1:00 No Fly Time"
-                        tempEntry.spokenText = "1 Minute no fly time before launch window"
-                        tempEntry.spokenPreDelay = 2.0
-                        tempEntry.spokenTextWait = false
-                        tempEntry.spokenTextOnCountdown = "remaining before launch window"
-                        tempEntry.hasBeginHorn = true
-                        tempEntry.beginHornLength = 1
-                        tempEntry.hasTimer = true
-                        tempEntry.timerSeconds = 60
-                        tempEntry.timerEveryFifteen = true
-                        tempEntry.timerLastTen = true
+                    if noFlyTime == false {
                         tempEntry.hasEndHorn = true
                         if loops > 1 {
                             tempEntry.endHornLength = 3
                         }else{
                             tempEntry.endHornLength = 2
                         }
-                        rowColor.toggle()
-                        tempEntry.rowColor = rowColor
-                        playList.append(tempEntry)
-                        sequence += 1
+                    }
+                    rowColor.toggle()
+                    tempEntry.rowColor = rowColor
+                    playList.append(tempEntry)
+                    sequence += 1
+                    
+                    for loop in 1...loops {
+                        if noFlyTime || loop > 1 {
+                            // Add the 1 minute no fly time
+                            tempEntry = playQueueEntry()
+                            tempEntry.sequenceID = sequence
+                            tempEntry.textDescription = "1:00 No Fly Time"
+                            tempEntry.spokenText = "1 Minute no fly time before launch window"
+                            tempEntry.spokenPreDelay = 1.5
+                            tempEntry.spokenTextWait = false
+                            tempEntry.spokenTextOnCountdown = "remaining before launch window"
+                            if loop == 1 { // Only have the beginning horn on the first one
+                                tempEntry.hasBeginHorn = true
+                            }
+                            tempEntry.beginHornLength = 1
+                            tempEntry.hasTimer = true
+                            tempEntry.timerSeconds = 60
+                            tempEntry.timerEveryFifteen = true
+                            tempEntry.timerLastTen = true
+                            tempEntry.hasEndHorn = true
+                            if loops > 1 {
+                                tempEntry.endHornLength = 3
+                            }else{
+                                tempEntry.endHornLength = 2
+                            }
+                            rowColor.toggle()
+                            tempEntry.rowColor = rowColor
+                            playList.append(tempEntry)
+                            sequence += 1
+                        }
                         
                         // Add the window time entry
                         tempEntry = playQueueEntry()
                         tempEntry.sequenceID = sequence
                         let windowTime = Int( taskInfo["window"]! )
-                        tempEntry.textDescription = "\(convertSecondsToClockString(seconds: windowTime!)) Flight Window"
+                        if loops > 1 { // if it is all ups
+                            tempEntry.textDescription = "3:00 Flight \(loop) Window"
+                        }else{
+                            tempEntry.textDescription = "\(convertSecondsToClockString(seconds: windowTime!)) Flight Window"
+                        }
                         tempEntry.spokenText = ""
                         tempEntry.hasBeginHorn = false
                         tempEntry.hasTimer = true

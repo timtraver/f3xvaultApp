@@ -28,6 +28,7 @@ struct EventDetailAudioView: View {
     @State var queueTimer = Timer.publish (every: 0.2, on: .current, in: .common).autoconnect()
     @State var currentQueueEntry: Int = 0
     @State var goToNextQueueEntry: Bool = false
+    @State private var scrollOffset: CGPoint = .zero
     
     let synth = SpeechSynthesizer()
     let horns = getHorns()
@@ -153,11 +154,14 @@ struct EventDetailAudioView: View {
                             Button(action: {
                                 // Lets say all of the flight tasks just to hear them
                                 // Call to make the queue go back one
-                                self.queueBackward()
                                 return
                             }) {
                                 Image(systemName: "backward.fill")
                                     .font(.title)
+                                .onTapGesture{}
+                                .onLongPressGesture(minimumDuration: 0.5) {
+                                    self.queueBackward()
+                                }
                             }
                             
                             Button(action: {
@@ -173,6 +177,7 @@ struct EventDetailAudioView: View {
                                 Image(systemName: "gobackward.15")
                                     .font(.title)
                             }
+                            .disabled(self.clockTotalSeconds == 0)
                             
                             Button(action: {
                                 // Play and pause button action
@@ -196,14 +201,18 @@ struct EventDetailAudioView: View {
                                 Image(systemName: "goforward.15")
                                     .font(.title)
                             }
-                            
+                            .disabled(self.clockTotalSeconds == 0)
+
                             Button(action: {
                                 // Call to make the queue go back one
-                                self.queueForward()
                                 return
                             }) {
                                 Image(systemName: "forward.fill")
                                     .font(.title)
+                                .onTapGesture{}
+                                .onLongPressGesture(minimumDuration: 0.5) {
+                                    self.queueForward()
+                                }
                             }
                         }
                         .frame(height: 40)
@@ -221,6 +230,7 @@ struct EventDetailAudioView: View {
                         if self.goToNextQueueEntry == true {
                             self.goToNextQueueEntry = false
                             self.processQueueEntry(entry: self.currentQueueEntry)
+                            self.scrollOffset = CGPoint(x: 0, y: 40 * self.currentQueueEntry)
                         }
                     }
                     
@@ -249,11 +259,9 @@ struct EventDetailAudioView: View {
                     .background(Color(.systemBlue).opacity(0.2))
                     
                     Group{
-                        ScrollView{
+                        ScrollableView(self.$scrollOffset, animationDuration: 10.0){
                             // Task List
-                            VStack{
-                                Spacer()
-                                    .frame(height: 0.01)
+                            VStack(spacing: 0){
                                 ForEach( self.eventViewModel.playListQueue ?? [] ){ queue in
                                     HStack(alignment: .center){
                                         Text("\(queue.sequenceID)")
@@ -262,7 +270,6 @@ struct EventDetailAudioView: View {
                                         if self.currentQueueEntry == queue.sequenceID - 1 {
                                             Image(systemName: "play.fill")
                                                 .frame(width: 35, height: 15)
-                                                .padding(0)
                                         }else{
                                             Text(" ")
                                                 .frame(width: 35, height: 15)
@@ -271,9 +278,8 @@ struct EventDetailAudioView: View {
                                             Text("   ")
                                         }
                                         Text("\(queue.textDescription)")
-                                            .fontWeight( queue.textDescription.contains("Round") || queue.textDescription.contains("Flight Window") ? .bold : .regular )
+                                            .fontWeight( queue.textDescription.contains("Round") || queue.textDescription.contains("Flight") ? .bold : .regular )
                                             .foregroundColor(Color( queue.textDescription.contains("Round") ? .black : .systemBlue ) )
-                                        
                                         Spacer()
                                     }
                                     .frame(width: geometry.size.width, height: 40)
@@ -282,6 +288,7 @@ struct EventDetailAudioView: View {
                                     .onTapGesture{}
                                     .onLongPressGesture(minimumDuration: 0.5) {
                                         self.queueToSpecificEntry(entry: queue.sequenceID - 1 )
+                                        self.scrollOffset = CGPoint(x: 0, y: 40 * self.currentQueueEntry)
                                     }
                                 }
                                 Spacer()
@@ -289,6 +296,9 @@ struct EventDetailAudioView: View {
                             }
                         }
                         .font(.system(size: 16))
+                        .onAppear{
+                            self.scrollOffset = CGPoint(x: 0, y: 0)
+                        }
                         Spacer()
                     }
                     .frame(width: geometry.size.width, height: geometry.size.height * 0.61 )
@@ -417,6 +427,7 @@ struct EventDetailAudioView: View {
             }else{
                 self.goToNextQueueEntry = true
             }
+            self.scrollOffset = CGPoint(x: 0, y: 40 * self.currentQueueEntry)
         }
         return
     }
@@ -433,6 +444,7 @@ struct EventDetailAudioView: View {
         if self.queueTimerRunning {
             self.goToNextQueueEntry = true
         }
+        self.scrollOffset = CGPoint(x: 0, y: 40 * self.currentQueueEntry)
         return
     }
     func queueBackward(){
@@ -450,6 +462,7 @@ struct EventDetailAudioView: View {
         if self.queueTimerRunning {
             self.goToNextQueueEntry = true
         }
+        self.scrollOffset = CGPoint(x: 0, y: 40 * self.currentQueueEntry)
         return
     }
     func queueToSpecificEntry(entry: Int){
@@ -465,6 +478,7 @@ struct EventDetailAudioView: View {
         if self.queueTimerRunning {
             self.goToNextQueueEntry = true
         }
+        self.scrollOffset = CGPoint(x: 0, y: 40 * self.currentQueueEntry)
         return
     }
     func processQueueEntry(entry: Int){
@@ -492,6 +506,12 @@ struct EventDetailAudioView: View {
             self.synth.speak(self.eventViewModel.playListQueue[entry].spokenText, self.eventViewModel.playListQueue[entry].spokenTextWait ,self.currentQueueEntry, 0.5, self.eventViewModel.playListQueue[entry].spokenPreDelay, self.eventViewModel.playListQueue[entry].spokenPostDelay)
         }
         return
+    }
+    func saveQueueState(){
+        // Function to save the current queue state, so that when we come back to the view, we can resume
+    }
+    func loadQueueState(){
+        // Function to load the queue state back to the saved value
     }
     func playHorn(length: Int = 2){
         let fileName = self.horns[UserDefaults.standard.integer( forKey: "audioHorn" )].fileName + "_\(length)"

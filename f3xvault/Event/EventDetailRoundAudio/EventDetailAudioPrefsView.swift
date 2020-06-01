@@ -15,6 +15,7 @@ struct EventDetailAudioPrefsView: View {
     @EnvironmentObject var settings: VaultSettings
     
     @State var selectedPrepTime: Int = UserDefaults.standard.integer( forKey: "audioPrepTime" )
+    @State var selectedNoFlyTime: Bool = UserDefaults.standard.bool( forKey: "audioNoFlyTime" )
     @State var selectedLanguage: String = UserDefaults.standard.string( forKey: "audioLanguage" ) ?? "en"
     @State var selectedVoice: String = UserDefaults.standard.string( forKey: "audioVoice" ) ?? "com.apple.ttsbundle.Samantha-compact"
     @State var selectedAnnouncePilots: Bool = UserDefaults.standard.bool( forKey: "audioAnnouncePilots" )
@@ -88,6 +89,9 @@ struct EventDetailAudioPrefsView: View {
                                             Text(time.value)
                                         }
                                     }
+                                    Toggle(isOn: self.$selectedNoFlyTime) {
+                                        Text("Use 1 Minute No Fly Time")
+                                    }
                                 }
                             }
                             .navigationBarTitle("")
@@ -100,6 +104,7 @@ struct EventDetailAudioPrefsView: View {
                             self.settings.audioLanguage = "en"
                             self.settings.audioVoice = "com.apple.ttsbundle.Samantha-compact"
                             self.settings.audioPrepTime = 2
+                            self.settings.audioNoFlyTime = true
                             self.settings.audioAnnouncePilots = true
                             self.settings.audioHorn = 0
                             self.settings.audioHornVolume = 1.0
@@ -136,6 +141,7 @@ struct EventDetailAudioPrefsView: View {
                             self.settings.audioVoice = self.selectedVoice
                             self.settings.audioAnnouncePilots = self.selectedAnnouncePilots
                             self.settings.audioPrepTime = self.selectedPrepTime
+                            self.settings.audioNoFlyTime = self.selectedNoFlyTime
                             self.settings.audioHorn = self.selectedHorn
                             self.settings.audioHornVolume = self.selectedHornVolume
                             saveSettings(settings: self.settings)

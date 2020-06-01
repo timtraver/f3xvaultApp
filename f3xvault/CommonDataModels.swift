@@ -62,9 +62,19 @@ class VaultSettings: ObservableObject {
     @Published var audioVoice: String
     @Published var audioLanguage: String
     @Published var audioPrepTime: Int
+    @Published var audioNoFlyTime: Bool
     @Published var audioAnnouncePilots: Bool
     @Published var audioHorn: Int
     @Published var audioHornVolume: Float
+    
+    // Playlist state variables for going in and out of the playlist view
+    @Published var queueEvent: Int
+    @Published var queueState: Bool
+    @Published var queueNumber: Int
+    @Published var queueTimerState: Bool
+    @Published var queueTimerStamp: TimeInterval
+
+    
     
     init(){
         self.keep_logged_in = UserDefaults.standard.bool( forKey: "keep_logged_in" )
@@ -84,16 +94,47 @@ class VaultSettings: ObservableObject {
         self.currentMainTab = Tab.home
         self.search = SearchParameters()
         
+        // Audio settings
         self.audioVoice = UserDefaults.standard.string( forKey: "audioVoice" ) ?? "com.apple.ttsbundle.Samantha-compact"
         self.audioLanguage = UserDefaults.standard.string( forKey: "audioLanguage" ) ?? "en"
-        if UserDefaults.standard.integer( forKey: "audioPrepTime" ) == 0 {
-            self.audioPrepTime = 2
-        }else{
+        if UserDefaults.contains("audioPrepTime") {
             self.audioPrepTime = UserDefaults.standard.integer( forKey: "audioPrepTime" )
+        }else{
+            self.audioPrepTime = 2
         }
-        self.audioAnnouncePilots = UserDefaults.standard.bool( forKey: "audioAnnouncePilots" )
-        self.audioHorn = UserDefaults.standard.integer( forKey: "audioHorn" )
-        self.audioHornVolume = UserDefaults.standard.float( forKey: "audioHornVolume" )
+        if UserDefaults.contains("audioNoFlyTime") {
+            self.audioNoFlyTime = UserDefaults.standard.bool( forKey: "audioNoFlyTime" )
+        }else{
+            self.audioNoFlyTime = true
+        }
+        if UserDefaults.contains("audioAnnouncePilots") {
+            self.audioAnnouncePilots = UserDefaults.standard.bool( forKey: "audioAnnouncePilots" )
+        }else{
+            self.audioAnnouncePilots = true
+        }
+        if UserDefaults.contains("audioHorn") {
+            self.audioHorn = UserDefaults.standard.integer( forKey: "audioHorn" )
+        }else{
+            self.audioHorn = 0
+        }
+        if UserDefaults.contains("audioHornVolume") {
+            self.audioHornVolume = UserDefaults.standard.float( forKey: "audioHornVolume" )
+        }else{
+            self.audioHornVolume = 1.0
+        }
+        
+        // Playlist Queue variables
+        self.queueEvent = 0
+        self.queueState = false
+        self.queueNumber = 0
+        self.queueTimerState = false
+        self.queueTimerStamp = 0.0
+        
+    }
+}
+extension UserDefaults {
+    static func contains(_ key: String) -> Bool {
+        return UserDefaults.standard.object(forKey: key) != nil
     }
 }
 

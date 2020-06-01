@@ -29,6 +29,7 @@ func saveSettings(settings: VaultSettings){
     UserDefaults.standard.set( settings.audioVoice, forKey: "audioVoice")
     UserDefaults.standard.set( settings.audioLanguage, forKey: "audioLanguage")
     UserDefaults.standard.set( settings.audioPrepTime, forKey: "audioPrepTime")
+    UserDefaults.standard.set( settings.audioNoFlyTime, forKey: "audioNoFlyTime")
     UserDefaults.standard.set( settings.audioAnnouncePilots, forKey: "audioAnnouncePilots")
     UserDefaults.standard.set( settings.audioHorn, forKey: "audioHorn")
     UserDefaults.standard.set( settings.audioHornVolume, forKey: "audioHornVolume")

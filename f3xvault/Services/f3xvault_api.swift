@@ -35,8 +35,8 @@ class vaultAPI {
         self.outputFormat = "json"
         // Retrieve the user login and password from the keychain
         let keychain = KeychainSwift()
-        self.login = keychain.get("userLogin") ?? ""
-        self.password = keychain.get("userPassword") ?? ""
+        self.login = keychain.get("userLogin") ?? "guest"
+        self.password = keychain.get("userPassword") ?? "Guest1234"
     }
     
     func setRequestVariable(name:String, value:Any){

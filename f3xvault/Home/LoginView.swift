@@ -142,9 +142,7 @@ struct LoginView: View {
                         RoundedRectangle(cornerRadius: 20)
                             .stroke(Color.white, lineWidth: 5)
                     )
-                    
-                    
-                    
+
                 }
                 .alert(isPresented: $showingAlert) {
                     Alert(title: Text("Login Error"), message: Text( "\(alertMessage)"), dismissButton: .default(Text("Try Again")))

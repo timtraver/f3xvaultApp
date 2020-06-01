@@ -67,6 +67,7 @@
 		28E9952D24822E8A006E14FD /* epic_1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 28E9952A24822E8A006E14FD /* epic_1.wav */; };
 		28E9952E24822E8A006E14FD /* epic_2.wav in Resources */ = {isa = PBXBuildFile; fileRef = 28E9952B24822E8A006E14FD /* epic_2.wav */; };
 		28E9952F24822E8A006E14FD /* epic_3.wav in Resources */ = {isa = PBXBuildFile; fileRef = 28E9952C24822E8A006E14FD /* epic_3.wav */; };
+		28E9953124843BDB006E14FD /* ScrollableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E9953024843BDB006E14FD /* ScrollableView.swift */; };
 		28FBE521243962AB00563AE9 /* KeychainSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28FBE520243962AB00563AE9 /* KeychainSwift.swift */; };
 		28FFC43124341A890070416B /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28FFC43024341A890070416B /* UserModel.swift */; };
 		28FFC43324341ABD0070416B /* f3xvault_api.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28FFC43224341ABD0070416B /* f3xvault_api.swift */; };
@@ -136,6 +137,7 @@
 		28E9952A24822E8A006E14FD /* epic_1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = epic_1.wav; sourceTree = "<group>"; };
 		28E9952B24822E8A006E14FD /* epic_2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = epic_2.wav; sourceTree = "<group>"; };
 		28E9952C24822E8A006E14FD /* epic_3.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = epic_3.wav; sourceTree = "<group>"; };
+		28E9953024843BDB006E14FD /* ScrollableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollableView.swift; sourceTree = "<group>"; };
 		28FBE520243962AB00563AE9 /* KeychainSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainSwift.swift; sourceTree = "<group>"; };
 		28FFC43024341A890070416B /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		28FFC43224341ABD0070416B /* f3xvault_api.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = f3xvault_api.swift; sourceTree = "<group>"; };
@@ -236,6 +238,7 @@
 				28576DD4243A57800078050C /* CommonFunctions.swift */,
 				282A824B24430B3800A54B17 /* CommonDataModels.swift */,
 				289DF4DB24724AFD001382CF /* AVAudioPlayerPool.swift */,
+				28E9953024843BDB006E14FD /* ScrollableView.swift */,
 				282A71AE2442684E00ABC39B /* Home */,
 				282A71AA244267F800ABC39B /* Event */,
 				282A71AC2442681E00ABC39B /* Locations */,
@@ -494,6 +497,7 @@
 				282A824A2442A39B00A54B17 /* EventSearchParams.swift in Sources */,
 				285F7B45243D4916008E710C /* SkeletonView.swift in Sources */,
 				28846488244832EC000F93E4 /* LocationModel.swift in Sources */,
+				28E9953124843BDB006E14FD /* ScrollableView.swift in Sources */,
 				28AD0871243D9B7900671751 /* PlaneSearchViewModel.swift in Sources */,
 				28405FE4242F20C700B37FE2 /* AppDelegate.swift in Sources */,
 				28405FFC242F3D2300B37FE2 /* LocationListView.swift in Sources */,

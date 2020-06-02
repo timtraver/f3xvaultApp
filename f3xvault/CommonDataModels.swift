@@ -68,11 +68,13 @@ class VaultSettings: ObservableObject {
     @Published var audioHornVolume: Float
     
     // Playlist state variables for going in and out of the playlist view
-    @Published var queueEvent: Int
+    @Published var queueEventId: Int
     @Published var queueState: Bool
     @Published var queueNumber: Int
     @Published var queueTimerState: Bool
     @Published var queueTimerStamp: TimeInterval
+    @Published var queueTimerCurrentSeconds: Double
+    @Published var queueTimerTotalSeconds: Double
 
     
     
@@ -124,14 +126,17 @@ class VaultSettings: ObservableObject {
         }
         
         // Playlist Queue variables
-        self.queueEvent = 0
+        self.queueEventId = 0
         self.queueState = false
         self.queueNumber = 0
         self.queueTimerState = false
         self.queueTimerStamp = 0.0
-        
+        self.queueTimerCurrentSeconds = 0.0
+        self.queueTimerTotalSeconds = 0
+
     }
 }
+// Extension to add a contains function to the UserDefaults class. This allows for easier use of seeing whether or not default value has a value for a key
 extension UserDefaults {
     static func contains(_ key: String) -> Bool {
         return UserDefaults.standard.object(forKey: key) != nil

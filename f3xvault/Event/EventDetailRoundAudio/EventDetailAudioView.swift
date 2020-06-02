@@ -158,9 +158,9 @@ struct EventDetailAudioView: View {
                             }) {
                                 Image(systemName: "backward.fill")
                                     .font(.title)
-                                .onTapGesture{}
-                                .onLongPressGesture(minimumDuration: 0.5) {
-                                    self.queueBackward()
+                                    .onTapGesture{}
+                                    .onLongPressGesture(minimumDuration: 0.5) {
+                                        self.queueBackward()
                                 }
                             }
                             
@@ -202,16 +202,16 @@ struct EventDetailAudioView: View {
                                     .font(.title)
                             }
                             .disabled(self.clockTotalSeconds == 0)
-
+                            
                             Button(action: {
                                 // Call to make the queue go back one
                                 return
                             }) {
                                 Image(systemName: "forward.fill")
                                     .font(.title)
-                                .onTapGesture{}
-                                .onLongPressGesture(minimumDuration: 0.5) {
-                                    self.queueForward()
+                                    .onTapGesture{}
+                                    .onLongPressGesture(minimumDuration: 0.5) {
+                                        self.queueForward()
                                 }
                             }
                         }

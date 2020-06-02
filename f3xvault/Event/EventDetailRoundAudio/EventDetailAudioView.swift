@@ -218,9 +218,6 @@ struct EventDetailAudioView: View {
                         .frame(height: 40)
                         .padding(0)
                     }
-                    .onAppear(){
-                        NotificationCenter.default.addObserver(forName: Notification.Name("speechFinished"), object: nil, queue: .main, using:self.catchSpeechNotification)
-                    }
                     .onReceive(self.queueTimer){ _ in
                         // The queue timer
                         // Stop the queue timer if it is not supposed to be running
@@ -310,6 +307,15 @@ struct EventDetailAudioView: View {
                 }
                 Spacer()
             }
+            .onAppear(){
+                NotificationCenter.default.addObserver(forName: Notification.Name("speechFinished"), object: nil, queue: .main, using:self.catchSpeechNotification)
+                self.loadQueueState( screenWidth: geometry.size.width )
+            }
+            .onDisappear(){
+                // Code to run when the user exits this screen to save the state of the queue
+                self.saveQueueState()
+            }
+
             ZStack{
                 Spacer()
                 VStack{
@@ -400,6 +406,7 @@ struct EventDetailAudioView: View {
             }
         }
         self.clockOldSeconds = currentSeconds
+        return
     }
     func togglePlayPause(){
         // Function to start and stop the main queue running
@@ -509,9 +516,53 @@ struct EventDetailAudioView: View {
     }
     func saveQueueState(){
         // Function to save the current queue state, so that when we come back to the view, we can resume
+        self.settings.queueEventId = self.eventViewModel.event_id
+        self.settings.queueState = self.queueTimerRunning
+        self.settings.queueNumber = self.currentQueueEntry
+        self.settings.queueTimerState = self.clockTimerRunning
+        self.settings.queueTimerCurrentSeconds = self.clockCurrentSeconds
+        self.settings.queueTimerTotalSeconds = self.clockTotalSeconds
+        self.settings.queueTimerStamp = TimeInterval(Int64(Date().timeIntervalSince1970))
+        return
     }
-    func loadQueueState(){
+    func loadQueueState( screenWidth: CGFloat ){
         // Function to load the queue state back to the saved value
+        // but only if we have come back to the same event
+        if self.settings.queueEventId != self.eventViewModel.event_id {
+            return
+        }
+        self.currentQueueEntry = self.settings.queueNumber
+        // Calculate what the current clock seconds are supposed to be from when we left
+        self.clockTotalSeconds = self.settings.queueTimerTotalSeconds
+        if self.settings.queueTimerState {
+            // If the timer in the queue was running then do the math to set the seconds
+            let diff = TimeInterval(Int64(Date().timeIntervalSince1970)) - self.settings.queueTimerStamp
+            let elapsed = self.settings.queueTimerCurrentSeconds - diff
+            if elapsed < 0 {
+                self.clockCurrentSeconds = 0
+            }else{
+                self.clockCurrentSeconds = elapsed
+            }
+        }else{
+            // Set the seconds to what they were
+            self.clockCurrentSeconds = self.settings.queueTimerCurrentSeconds
+        }
+        // Update the clock display
+        if self.clockCurrentSeconds > 0 {
+            self.updateClockText( screenWidth: screenWidth )
+        }
+        if self.settings.queueState {
+            // queue is running so lets start that queue
+            self.queueTimerRunning = true
+            self.queueTimer = Timer.publish(every: 0.2, on: .current, in: .common).autoconnect()
+        }
+        if self.settings.queueTimerState {
+            // queue timer is running, so lets start that
+            self.clockTimerRunning = true
+            self.clockTimer = Timer.publish(every: 0.1, on: .current, in: .common).autoconnect()
+        }
+        self.scrollOffset = CGPoint(x: 0, y: 40 * self.currentQueueEntry)
+        return
     }
     func playHorn(length: Int = 2){
         let fileName = self.horns[UserDefaults.standard.integer( forKey: "audioHorn" )].fileName + "_\(length)"

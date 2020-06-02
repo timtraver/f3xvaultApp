@@ -133,7 +133,6 @@ func getHorns() -> [Horn]{
 func getVoices() -> [Voice]{
     var voices = [Voice]()
     let systemVoices = AVSpeechSynthesisVoice.speechVoices()
-    print(systemVoices)
     for voice in systemVoices {
         voices.append( Voice(code: voice.language,name: voice.name, identifier: voice.identifier) )
     }

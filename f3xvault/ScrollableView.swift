@@ -189,6 +189,7 @@ final class UIScrollViewController<Content: View> : UIViewController, Observable
         self.hostingController.view.frame.size = contentSize
         self.scrollView.contentSize            = contentSize
         self.view.updateConstraintsIfNeeded()
+        self.view.layoutIfNeeded()
     }
 
     required init?(coder: NSCoder) {

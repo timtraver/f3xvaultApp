@@ -30,6 +30,28 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
     }
 
+    // function for receiving URL entries
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        guard let context = URLContexts.first else { return }
+        switch(context.url.host){
+        case "event":
+            if let event_id = Int(context.url.pathComponents[1]) {
+                navigateToEventDetailView(event_id: event_id, viewSettings: VaultSettings())
+            }
+            break
+        case "audio":
+            if let event_id = Int(context.url.pathComponents[1]) {
+                let viewModel = EventDetailViewModel(event_id: event_id)
+                navigateToEventView(viewName: "EventDetailAudioView", eventViewModel: viewModel, viewSettings: VaultSettings())
+            }
+            break
+        default:
+            navigateToView(viewName: "Login", viewSettings: VaultSettings())
+            break
+        }
+        return
+    }
+
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
         // This occurs shortly after the scene enters the background, or when its session is discarded.

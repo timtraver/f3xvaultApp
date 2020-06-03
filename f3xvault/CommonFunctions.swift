@@ -133,10 +133,75 @@ func getHorns() -> [Horn]{
 func getVoices() -> [Voice]{
     var voices = [Voice]()
     let systemVoices = AVSpeechSynthesisVoice.speechVoices()
+    // Create the arrays for 30 second speed up and twenty second speed up
+    let thirty: [String] = [
+        "com.apple.ttsbundle.Maged-compact",
+        "com.apple.ttsbundle.Zuzana-compact",
+        "com.apple.ttsbundle.Anna-compact",
+        "com.apple.ttsbundle.siri_female_de-DE_compact",
+        "com.apple.ttsbundle.siri_male_de-DE_compact",
+        "com.apple.ttsbundle.Melina-compact",
+        "com.apple.ttsbundle.Karen-premium",
+        "com.apple.ttsbundle.Lee-premium",
+        "com.apple.ttsbundle.siri_female_en-AU_compact",
+        "com.apple.ttsbundle.Karen-compact",
+        "com.apple.ttsbundle.Lee-compact",
+        "com.apple.ttsbundle.Daniel-compact",
+        "com.apple.ttsbundle.siri_female_en-GB_compact",
+        "com.apple.ttsbundle.Moira-compact",
+        "com.apple.ttsbundle.siri_female_en-US_compact",
+        "com.apple.ttsbundle.Tessa-premium",
+        "com.apple.ttsbundle.Tessa-compact",
+        "com.apple.ttsbundle.Satu-compact",
+        "com.apple.ttsbundle.Carmit-compact",
+        "com.apple.ttsbundle.Mariska-compact",
+        "com.apple.ttsbundle.Damayanti-compact",
+        "com.apple.ttsbundle.Ellen-compact",
+        "com.apple.ttsbundle.Zosia-compact",
+        "com.apple.ttsbundle.Luciana-compact",
+        "com.apple.ttsbundle.Joana-compact",
+        "com.apple.ttsbundle.Ioana-compact",
+        "com.apple.ttsbundle.Milena-compact",
+        "com.apple.ttsbundle.Laura-compact",
+        "com.apple.ttsbundle.Alva-compact",
+        "com.apple.ttsbundle.Kanya-compact",
+        "com.apple.ttsbundle.Yelda-compact",
+        "com.apple.ttsbundle.siri_male_zh-CN_compact",
+        "com.apple.ttsbundle.Ting-Ting-compact",
+        "com.apple.ttsbundle.siri_female_zh-CN_compact",
+    ]
+    let twenty: [String] = [
+        "com.apple.ttsbundle.Maged-compact",
+        "com.apple.ttsbundle.Zuzana-compact",
+        "com.apple.ttsbundle.Tessa-premium",
+        "com.apple.ttsbundle.Satu-compact",
+        "com.apple.ttsbundle.Mariska-compact",
+        "com.apple.ttsbundle.Damayanti-compact",
+        "com.apple.ttsbundle.Zosia-compact",
+        "com.apple.ttsbundle.Ioana-compact",
+        "com.apple.ttsbundle.Milena-compact",
+        "com.apple.ttsbundle.Laura-compact",
+        "com.apple.ttsbundle.siri_male_zh-CN_compact",
+        "com.apple.ttsbundle.Ting-Ting-compact",
+        "com.apple.ttsbundle.siri_female_zh-CN_compact",
+    ]
     for voice in systemVoices {
-        voices.append( Voice(code: voice.language,name: voice.name, identifier: voice.identifier) )
+        voices.append( Voice(code: voice.language,name: voice.name, identifier: voice.identifier, thirtySpeed: thirty.contains(voice.identifier), twentySpeed: twenty.contains(voice.identifier)) )
     }
     return voices
+}
+func getCurrentVoice() -> Voice{
+    // Get the individual voice from the list of voices
+    let voices = getVoices()
+    let currentVoiceID = UserDefaults.standard.string( forKey: "audioVoice" ) ?? "com.apple.ttsbundle.Samantha-compact"
+    var returnVoice: Voice!
+    for voice in voices {
+        if voice.identifier == currentVoiceID {
+            returnVoice = voice
+            break
+        }
+    }
+    return returnVoice
 }
 func getLanguages() -> [(key: String, value: String)] {
     return [

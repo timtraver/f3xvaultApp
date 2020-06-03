@@ -34,6 +34,8 @@ struct Voice: Codable, Equatable, Identifiable {
     var code: String
     var name: String
     var identifier: String
+    var thirtySpeed: Bool
+    var twentySpeed: Bool
 }
 
 

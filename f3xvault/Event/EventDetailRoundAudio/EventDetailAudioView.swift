@@ -23,7 +23,7 @@ struct EventDetailAudioView: View {
     @State var clockTotalSeconds: Double = 0.0
     @State var clockOldSeconds: Int = 0
     @State var clockTimerRunning: Bool = false
-    @State var clockTimer = Timer.publish (every: 0.1, on: .current, in: .common).autoconnect()
+    @State var clockTimer = Timer.publish (every: 0.05, on: .current, in: .common).autoconnect()
     @State var queueTimerRunning: Bool = false
     @State var queueTimer = Timer.publish (every: 0.2, on: .current, in: .common).autoconnect()
     @State var currentQueueEntry: Int = 0
@@ -32,7 +32,8 @@ struct EventDetailAudioView: View {
     
     let synth = SpeechSynthesizer()
     let horns = getHorns()
-    
+    let currentVoice = getCurrentVoice()
+
     var body: some View {
         GeometryReader{ geometry in
             VStack{
@@ -126,7 +127,7 @@ struct EventDetailAudioView: View {
                                 .fontWeight(.bold)
                                 .onReceive(self.clockTimer){ _ in
                                     if self.clockTimerRunning && self.clockCurrentSeconds > 0 {
-                                        self.clockCurrentSeconds -= 0.1
+                                        self.clockCurrentSeconds -= 0.05
                                         self.updateClockText(screenWidth: geometry.size.width)
                                     }
                                     if self.clockCurrentSeconds <= 0 {
@@ -356,7 +357,7 @@ struct EventDetailAudioView: View {
         self.clockText = convertSecondsToClockString( seconds: currentSeconds )
         self.progressBarWidth = screenWidth * CGFloat( self.clockCurrentSeconds / self.clockTotalSeconds )
         // Now lets check to see if we need to announce the time remaining
-        if self.clockOldSeconds != currentSeconds {  // This is to prevent it from saying duplicates because the clock time is 0.1
+        if self.clockOldSeconds != currentSeconds {  // This is to prevent it from saying duplicates because the clock time is 0.05
             // Set a boolean on whether or not to accounce the time
             var speak: Bool = false
             var speakSpeed: Double = 0.5
@@ -397,11 +398,12 @@ struct EventDetailAudioView: View {
                 if self.eventViewModel.playListQueue[self.currentQueueEntry].spokenTextOnCountdown != "" && currentSeconds >= 15 {
                     speakText += " \(self.eventViewModel.playListQueue[self.currentQueueEntry].spokenTextOnCountdown)"
                 }
-                // Lets increase the speaking speed if they are counting down the last thirty
-                if self.eventViewModel.playListQueue[self.currentQueueEntry].timerLastThirty && currentSeconds <= 30 {
-                    speakSpeed = 0.6
+                // Lets increase the speaking speed if they are counting down the last thirty and need to be from the voice settings
+                if self.eventViewModel.playListQueue[self.currentQueueEntry].timerLastThirty {
+                    speakSpeed = 0.5
+                    if currentSeconds <= 30 && currentSeconds > 20 && self.currentVoice.thirtySpeed { speakSpeed = 0.58 }
+                    if currentSeconds <= 20 && currentSeconds > 10 && self.currentVoice.twentySpeed { speakSpeed = 0.6 }
                 }
-                
                 self.synth.speak("\(speakText)", false, 0, speakSpeed )
             }
         }
@@ -429,7 +431,7 @@ struct EventDetailAudioView: View {
                     self.goToNextQueueEntry = true
                 }else{
                     self.clockTimerRunning = true
-                    self.clockTimer = Timer.publish(every: 0.1, on: .current, in: .common).autoconnect()
+                    self.clockTimer = Timer.publish(every: 0.05, on: .current, in: .common).autoconnect()
                 }
             }else{
                 self.goToNextQueueEntry = true
@@ -504,7 +506,7 @@ struct EventDetailAudioView: View {
             self.clockCurrentSeconds = self.eventViewModel.playListQueue[entry].timerSeconds
             self.clockTimerRunning = true
             self.clockTimer.upstream.connect().cancel()
-            self.clockTimer = Timer.publish(every: 0.1, on: .current, in: .common).autoconnect()
+            self.clockTimer = Timer.publish(every: 0.05, on: .current, in: .common).autoconnect()
         }
         
         // If the entry has some speech, then call the speech synthesizer
@@ -559,7 +561,7 @@ struct EventDetailAudioView: View {
         if self.settings.queueTimerState {
             // queue timer is running, so lets start that
             self.clockTimerRunning = true
-            self.clockTimer = Timer.publish(every: 0.1, on: .current, in: .common).autoconnect()
+            self.clockTimer = Timer.publish(every: 0.05, on: .current, in: .common).autoconnect()
         }
         self.scrollOffset = CGPoint(x: 0, y: 40 * self.currentQueueEntry)
         return

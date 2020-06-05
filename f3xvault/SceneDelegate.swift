@@ -18,16 +18,24 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
 
-        // Create the SwiftUI view that provides the window contents.
-        let contentView = LoginView().environmentObject(VaultSettings())
-
+        let settings = VaultSettings()
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
-            window.rootViewController = UIHostingController(rootView: contentView)
+            if settings.keep_logged_in {
+                // They have already logged in, so lets send them to the Home view
+                window.rootViewController = UIHostingController(rootView: HomeView(pilot_id: settings.pilot_id).environmentObject(settings))
+            }else{
+                window.rootViewController = UIHostingController(rootView: LoginView().environmentObject(settings))
+            }
             self.window = window
             window.makeKeyAndVisible()
         }
+        
+        // Trigger the URL scene function if we get here with URL's
+        let userActivity = connectionOptions.urlContexts
+        self.scene(scene, openURLContexts: userActivity)
+
     }
 
     // function for receiving URL entries
@@ -39,14 +47,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 navigateToEventDetailView(event_id: event_id, viewSettings: VaultSettings())
             }
             break
-        case "audio":
-            if let event_id = Int(context.url.pathComponents[1]) {
-                let viewModel = EventDetailViewModel(event_id: event_id)
-                navigateToEventView(viewName: "EventDetailAudioView", eventViewModel: viewModel, viewSettings: VaultSettings())
-            }
-            break
         default:
-            navigateToView(viewName: "Login", viewSettings: VaultSettings())
             break
         }
         return

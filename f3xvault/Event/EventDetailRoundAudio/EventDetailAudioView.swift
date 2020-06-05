@@ -11,7 +11,7 @@ import AVKit
 import AVFoundation
 
 struct EventDetailAudioView: View {
-    var eventViewModel: EventDetailViewModel
+    @ObservedObject var eventViewModel: EventDetailViewModel
     @EnvironmentObject var settings: VaultSettings
     
     // Set up a bunch of state variables for the queues and statuses
@@ -33,7 +33,7 @@ struct EventDetailAudioView: View {
     let synth = SpeechSynthesizer()
     let horns = getHorns()
     let currentVoice = getCurrentVoice()
-
+    
     var body: some View {
         GeometryReader{ geometry in
             VStack{
@@ -577,6 +577,7 @@ struct EventDetailAudioView: View {
         }
         return
     }
+    
 }
 
 class AVdelegate : NSObject,AVAudioPlayerDelegate{

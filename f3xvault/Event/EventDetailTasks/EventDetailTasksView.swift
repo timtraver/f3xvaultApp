@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct EventDetailTasksView: View {
-    var eventViewModel: EventDetailViewModel
+    @ObservedObject var eventViewModel: EventDetailViewModel
     @EnvironmentObject var settings: VaultSettings
     
     var body: some View {

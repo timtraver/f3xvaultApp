@@ -11,8 +11,8 @@ import SwiftUI
 struct EventDetailRoundsView: View {
 
     @State var round: Int
-    var eventViewModel: EventDetailViewModel
-    
+    @ObservedObject var eventViewModel: EventDetailViewModel
+
     @EnvironmentObject var settings: VaultSettings
     
     var roundType: String{ getRoundType() }

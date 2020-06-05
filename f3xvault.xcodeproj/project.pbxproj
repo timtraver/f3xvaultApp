@@ -13,6 +13,7 @@
 		282A824A2442A39B00A54B17 /* EventSearchParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282A82492442A39B00A54B17 /* EventSearchParams.swift */; };
 		282A824C24430B3800A54B17 /* CommonDataModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282A824B24430B3800A54B17 /* CommonDataModels.swift */; };
 		282A824F2444305700A54B17 /* Countries.json in Resources */ = {isa = PBXBuildFile; fileRef = 282A824E2444305700A54B17 /* Countries.json */; };
+		2830C03B2489FF9100C4DAFA /* OSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2830C03A2489FF9100C4DAFA /* OSLog.swift */; };
 		28405FE4242F20C700B37FE2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28405FE3242F20C700B37FE2 /* AppDelegate.swift */; };
 		28405FE6242F20C700B37FE2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28405FE5242F20C700B37FE2 /* SceneDelegate.swift */; };
 		28405FE8242F20C700B37FE2 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28405FE7242F20C700B37FE2 /* LoginView.swift */; };
@@ -33,7 +34,6 @@
 		286CEA8624541BE900EDA799 /* EventDetailTasksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 286CEA8524541BE900EDA799 /* EventDetailTasksView.swift */; };
 		286CEA8824541C0100EDA799 /* EventDetailStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 286CEA8724541C0100EDA799 /* EventDetailStatsView.swift */; };
 		28795596246BC5AE006C48CA /* EventDetailAudioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28795595246BC5AE006C48CA /* EventDetailAudioView.swift */; };
-		287C1EFB246DC4BA00815718 /* AudioFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287C1EFA246DC4BA00815718 /* AudioFiles.swift */; };
 		28846488244832EC000F93E4 /* LocationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28846487244832EC000F93E4 /* LocationModel.swift */; };
 		2884648A244833F1000F93E4 /* LocationSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28846489244833F1000F93E4 /* LocationSearchViewModel.swift */; };
 		2884648C2448420C000F93E4 /* LocationSearchParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2884648B2448420C000F93E4 /* LocationSearchParams.swift */; };
@@ -80,6 +80,7 @@
 		282A82492442A39B00A54B17 /* EventSearchParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventSearchParams.swift; sourceTree = "<group>"; };
 		282A824B24430B3800A54B17 /* CommonDataModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonDataModels.swift; sourceTree = "<group>"; };
 		282A824E2444305700A54B17 /* Countries.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Countries.json; sourceTree = "<group>"; };
+		2830C03A2489FF9100C4DAFA /* OSLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSLog.swift; sourceTree = "<group>"; };
 		28405FE0242F20C700B37FE2 /* f3xvault.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = f3xvault.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		28405FE3242F20C700B37FE2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		28405FE5242F20C700B37FE2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -101,7 +102,6 @@
 		286CEA8524541BE900EDA799 /* EventDetailTasksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailTasksView.swift; sourceTree = "<group>"; };
 		286CEA8724541C0100EDA799 /* EventDetailStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailStatsView.swift; sourceTree = "<group>"; };
 		28795595246BC5AE006C48CA /* EventDetailAudioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailAudioView.swift; sourceTree = "<group>"; };
-		287C1EFA246DC4BA00815718 /* AudioFiles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioFiles.swift; sourceTree = "<group>"; };
 		28846487244832EC000F93E4 /* LocationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationModel.swift; sourceTree = "<group>"; };
 		28846489244833F1000F93E4 /* LocationSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchViewModel.swift; sourceTree = "<group>"; };
 		2884648B2448420C000F93E4 /* LocationSearchParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchParams.swift; sourceTree = "<group>"; };
@@ -239,6 +239,7 @@
 				282A824B24430B3800A54B17 /* CommonDataModels.swift */,
 				289DF4DB24724AFD001382CF /* AVAudioPlayerPool.swift */,
 				28E9953024843BDB006E14FD /* ScrollableView.swift */,
+				2830C03A2489FF9100C4DAFA /* OSLog.swift */,
 				282A71AE2442684E00ABC39B /* Home */,
 				282A71AA244267F800ABC39B /* Event */,
 				282A71AC2442681E00ABC39B /* Locations */,
@@ -291,7 +292,6 @@
 			children = (
 				28795595246BC5AE006C48CA /* EventDetailAudioView.swift */,
 				289DF4D12470C64E001382CF /* EventDetailAudioPrefsView.swift */,
-				287C1EFA246DC4BA00815718 /* AudioFiles.swift */,
 			);
 			path = EventDetailRoundAudio;
 			sourceTree = "<group>";
@@ -505,7 +505,6 @@
 				28AD08772440DD8200671751 /* PlaneDetailViewModel.swift in Sources */,
 				28405FF8242F3C6800B37FE2 /* HomeView.swift in Sources */,
 				2884648C2448420C000F93E4 /* LocationSearchParams.swift in Sources */,
-				287C1EFB246DC4BA00815718 /* AudioFiles.swift in Sources */,
 				285F7B41243D1A12008E710C /* BottomTabView.swift in Sources */,
 				2884648A244833F1000F93E4 /* LocationSearchViewModel.swift in Sources */,
 				28576DDC243B0C240078050C /* PilotDetailViewModel.swift in Sources */,
@@ -535,6 +534,7 @@
 				28FFC43124341A890070416B /* UserModel.swift in Sources */,
 				28CF3017244C010C008C6630 /* PilotSearchViewModel.swift in Sources */,
 				286CEA8424541BD700EDA799 /* EventDetailRoundsView.swift in Sources */,
+				2830C03B2489FF9100C4DAFA /* OSLog.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -690,7 +690,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = timtraver.f3xvault;
+				PRODUCT_BUNDLE_IDENTIFIER = com.f3xvault;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -710,7 +710,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = timtraver.f3xvault;
+				PRODUCT_BUNDLE_IDENTIFIER = com.f3xvault;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

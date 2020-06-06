@@ -123,11 +123,11 @@ func getCountries() -> [Country]{
 }
 func getHorns() -> [Horn]{
     var horns = [Horn]()
-    horns.append( Horn( id: 0, fileName: "air", fileType: "wav", description: "Air Horn 1" ) )
-    horns.append( Horn( id: 1, fileName: "sportsarena", fileType: "wav", description: "Sports Arena" ) )
-    horns.append( Horn( id: 2, fileName: "ship", fileType: "wav", description: "Ship Horn" ) )
-    horns.append( Horn( id: 3, fileName: "inception", fileType: "wav", description: "Inception Horn" ) )
-    horns.append( Horn( id: 4, fileName: "epic", fileType: "wav", description: "Epic Horn" ) )
+    horns.append( Horn( id: 0, fileName: "air", fileType: "wav", description: NSLocalizedString("Air Horn 1", comment: "Air Horn 1") ) )
+    horns.append( Horn( id: 1, fileName: "sportsarena", fileType: "wav", description: NSLocalizedString("Sports Arena", comment: "Sports Arena") ) )
+    horns.append( Horn( id: 2, fileName: "ship", fileType: "wav", description: NSLocalizedString("Ship Horn", comment: "Ship Horn") ) )
+    horns.append( Horn( id: 3, fileName: "inception", fileType: "wav", description: NSLocalizedString("Inception Horn", comment: "Inception Horn") ) )
+    horns.append( Horn( id: 4, fileName: "epic", fileType: "wav", description: NSLocalizedString("Epic Horn", comment: "Epic Horn") ) )
     return horns
 }
 func getVoices() -> [Voice]{
@@ -205,15 +205,17 @@ func getCurrentVoice() -> Voice{
 }
 func getLanguages() -> [(key: String, value: String)] {
     return [
-        "en" : "English",
-        "es" : "Spanish",
+        "en" : NSLocalizedString("English", comment: "English"),
+        "es" : NSLocalizedString("Spanish", comment: "Spanish"),
         ].sorted{$0.key < $1.key}
 }
 func getPrepTimes() -> [(key: Int, value: String)] {
     return [
-        1 : "1 Minute",
-        2 : "2 Minutes",
-        3 : "3 Minutes",
+        1 : NSLocalizedString("1 Minute", comment: "Time"),
+        2 : NSLocalizedString("2 Minutes", comment: "Time"),
+        3 : NSLocalizedString("3 Minutes", comment: "Time"),
+        4 : NSLocalizedString("4 Minutes", comment: "Time"),
+        5 : NSLocalizedString("5 Minutes", comment: "Time"),
         ].sorted{$0.key < $1.key}
 }
 func getVolumes() -> [(key: Float, value: String)] {

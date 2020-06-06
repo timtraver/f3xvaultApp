@@ -87,6 +87,7 @@ struct EventTask: Codable, Identifiable {
     var flight_type_start_penalty: Int
     var flight_type_over_penalty: Int
     var flight_type_sub_flights: Int
+    var event_task_time_choice: Int
     var rowColor: Bool?
     init(){
         self.round_number = 0
@@ -102,6 +103,7 @@ struct EventTask: Codable, Identifiable {
         self.flight_type_start_penalty = 0
         self.flight_type_over_penalty = 0
         self.flight_type_sub_flights = 0
+        self.event_task_time_choice = 0
         self.rowColor = false
     }
 }

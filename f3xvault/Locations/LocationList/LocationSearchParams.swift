@@ -28,25 +28,25 @@ struct LocationSearchParamsView: View {
     }
     
     let countries = getCountries()
-    
     let event_types : [(key: String, value: String)] = [
         "" : "All",
-        "f3f" : "F3F Slope Racing",
-        "f3b" : "F3B Multi Task",
-        "f3j" : "F3J Thermal Duration",
-        "f3k" : "F3K Hand Launch",
-        "td"  : "Thermal Duration",
-        "mom" : "MOM Slope Racing",
-        "gps" : "GPS Triangle Racing",
+        "f3f" : NSLocalizedString("F3F Slope Racing", comment: "F3F Slope Racing"),
+        "f3b" : NSLocalizedString("F3B Multi Task", comment: "F3B Multi Task"),
+        "f3j" : NSLocalizedString("F3J Thermal Duration", comment: "F3J Thermal Duration"),
+        "f5j" : NSLocalizedString("F5J Electric Duration", comment: "F5J Electric Duration"),
+        "f3k" : NSLocalizedString("F3K Hand Launch", comment: "F3K Hand Launch"),
+        "td"  : NSLocalizedString("Thermal Duration", comment: "Thermal Duration"),
+        "mom" : NSLocalizedString("MOM Slope Racing", comment: "MOM Slope Racing"),
+        "gps" : NSLocalizedString("GPS Triangle Racing", comment: "GPS Triangle Racing"),
         ].sorted{$0.key < $1.key}
-    
+
     var body: some View {
         GeometryReader{ geometry in
             VStack{
                 // Page Title
                 VStack{
                     HStack(alignment: .top) {
-                        Text("F3X Locations")
+                        Text("Locations Search")
                             .font(.title)
                             .fontWeight(.semibold)
                         VStack{

@@ -155,7 +155,7 @@ struct LoginView: View {
                 }) {
                     HStack{
                         Image(systemName: self.settings.keep_logged_in ? "checkmark.square" : "square")
-                        Text("keep me Logged In")
+                        Text("Keep me Logged In")
                     }
                     .foregroundColor(Color.white)
 
@@ -202,7 +202,7 @@ struct LoginView: View {
             switch results {
             case .success(let user):
                 if user.response_code == 0 {
-                    self.alertMessage = "Login Failed \(user.error_string)"
+                    self.alertMessage = NSLocalizedString("Login Failed ", comment: "Login Failed") + NSLocalizedString(user.error_string, comment: "Login Error String")
                     self.password = ""
                     self.showingAlert = true
                     self.keychain.set(self.login, forKey: "userLogin")

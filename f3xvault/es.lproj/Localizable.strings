@@ -7,11 +7,18 @@
 */
 
 // Full localized strings table
-// English
+// Spanish
 
 // Initial login screen
+"Email Address or Login" = "Dirección de correo electrónico o Iniciar sesión";
+"Password" = "Contraseña";
 "Login" = "Iniciar sesión";
 "Enter as Guest" = "Entrar Como Invitado";
+"Keep me Logged In" = "Mantenme conectado";
+"Login Error" = "Error de inicio de sesión";
+"Login Failed " = "Error de inicio de sesion ";
+"Dude, we got an error! " = "Amigo, tenemos un error! ";
+"2 - User password is not correct." = "2 - La contraseña del usuario no es correcta.";
 
 // Main Tab bar
 "Home" = "Casa";
@@ -22,7 +29,7 @@
 
 // Home screen
 "Welcome" = "Bienvenidos";
-"Welcome \(self.settings.user_first_name) !" = "Bienvenidos \(self.settings.user_first_name) !";
+"Welcome %@ !" = "Bienvenidos %@ !";
 "Show Me My Last Event" = "Muéstrame Mi último Evento";
 "Take Me To Todays Event!" = "¡Llévame al evento de hoy!";
 "View My Profile" = "Mira mi perfil";
@@ -32,3 +39,202 @@
 "Browse Pilots" = "Explorar Pilotos";
 "Log Out" = "Cerrar sesión";
 
+// Country List
+"All" = "Todas";
+"---Quick Country Picks---" = "---Selecciones rápidas del país---";
+
+// Event Tab View
+"Home" = "Casa";
+"Standings" = "Posiciones";
+"Rounds" = "Rondas";
+"Tasks" = "Tareas";
+"Stats" = "Estadísticas";
+
+// Event List View
+"Events" = "Eventos";
+"Active Filters" = "Filtros activos";
+"Set Filters" = "Establecer filtros";
+"Total Records : " = "Registros totales : ";
+" of " = " de ";
+"search" = "buscar";
+"Cancel" = "Cancelar";
+"Date" = "Fecha";
+"Event Name" = "Nombre del evento";
+
+// Event Search Filters
+"F3F Slope Racing" = "F3F Slope Racing";
+"F3B Multi Task" = "F3B Multi Task";
+"F3J Thermal Duration" = "F3J Duración térmica";
+"F5J Electric Duration" = "F5J Duración eléctrica";
+"F3K Hand Launch" = "Lanzamiento manual F3K";
+"Thermal Duration" = "Duración termal";
+"MOM Slope Racing" = "MOM Slope Racing";
+"GPS Triangle Racing" = "GPS Triangle Racing";
+"Event Search" = "Búsqueda de eventos";
+"Search Parameters" = "Parámetros de búsqueda";
+"Selected Search Filters" = "Filtros de búsqueda seleccionados";
+"Use Date Range" = "Usar rango de fechas";
+"   Date From : " = "   Fecha de : ";
+"   Date To : " = "   Fecha hasta : ";
+"By Type" = "Por tipo";
+"Event Type" = "Tipo de evento";
+"By Country" = "Por país";
+"Country Code" = "Código de país";
+"Clear Search Filters" = "Borrar filtros de búsqueda";
+"Apply Search Filters" = "Aplicar filtros de búsqueda";
+
+// Event Detail View - Standings
+"Event Detail" = "Detalle del evento";
+"Back" = "Atrás";
+"Event Name" = "Nombre del evento";
+"Location" = "Ubicación";
+"Start Date" = "Fecha de inicio";
+"Event Type" = "Tipo de evento";
+"Event Flyoff %@ Standings" = "Evento Flyoff %@ Posiciones";
+"Event Preliminary Standings" = "Clasificación preliminar del evento";
+"( %@ Rounds)" = "( %@ Rondas)";
+"Pos" = "Pos";
+"Bib" = "Bib";
+"Pilot Name" = "Nombre del piloto";
+"Total" = "Total";
+"Diff" = "Diff";
+"Drop" = "Soltar";
+"Pen" = "Pen";
+"Round %@" = "Ronda %@";
+
+// Event Detail Rounds View - only that are different from above
+"Group %@" = "Grupo %@";
+"Time" = "Hora";
+"Score" = "Marcador";
+"Laps" = "Vueltas";
+"Land" = "Aterrizar";
+"Start Height" = "Altura de inicio";
+"Start Pen" = "Pen de inicio";
+"F3B Multi Task Round" = "F3B Ronda de tareas múltiples";
+
+// Event Detail View - Tasks only that are different from above
+"Event Tasks" = "Tareas de eventos";
+"Audio Playlist" = "Lista de audio";
+"Rnd" = "Rnd";
+"Task Code" = "Task Código";
+"Task Description" = "Descripción de la tarea";
+"%@ Minute Duration with Precision Landing" = "%@ Duración minuto con aterrizaje de precisión";
+
+// Event Detail Audio View - only that are different from above
+"Audio Prefs" = "Preferencias de audio";
+"Audio Playlist Queue" = "Cola de lista de audio";
+"Num" = "Num";
+"Queue Description" = "Descripción de la cola";
+
+// Event Detail Audio Prefs View - only that are different from above
+"Audio Prefs" = "Preferencias de audio";
+"Audio Playlist Preferences" = "Preferencias de lista de audio";
+"Announce Pilots in Groups" = "Anunciar Pilotos en Grupos";
+"Language" = "Idioma";
+"Voice" = "Voz";
+"Sounds" = "Suena";
+"Horn Type" = "Tipo de Bocina";
+"Horn Relative Volume" = "Volumen Relativo del Claxon";
+"Timing" = "Sincronización";
+"Prep Time Length" = "Duración del Tiempo de Preparación";
+"Use 1 Minute No Fly Time" = "Use 1 Minuto sin Tiempo de Vuelo";
+"Reset To Defaults" = "Restablecer los valores predeterminados";
+"Save Audio Prefs" = "Guardar Preferencias";
+
+// Audio Pref Values
+// Horn Names
+"Air Horn 1" = "Corneta de Aire 1";
+"Sports Arena" = "Campo de Deportes";
+"Ship Horn" = "Cuerno de Barco";
+"Inception Horn" = "Inception Cuerno";
+"Epic Horn" = "Epic Cuerno";
+// Languages
+"English" = "Inglés";
+"Spanish" = "Español";
+// Prep Times
+"1 Minute" = "1 Minuto";
+"2 Minutes" = "2 Minutos";
+"3 Minutes" = "3 Minutos";
+"4 Minutes" = "4 Minutos";
+"5 Minutes" = "5 Minutos";
+
+// Event Detail Stats View - only that are different from above
+"Stats View" = "Estadísticas";
+
+// Locations View
+"Locations" = "Localizaciones";
+"Location Name" = "Nombre del Lugar";
+
+// Locations Search Params
+"Locations Search" = "Búsqueda de Ubicaciones";
+"Search Parameters" = "Parámetros de Búsqueda";
+"By Type" = "Por Tipo";
+"Discipline Type" = "Tipo de Disciplina";
+"By Country" = "Por País";
+"Country Code" = "Código de País";
+"Clear Search Filters" = "Borrar Filtros";
+"Apply Search Filters" = "Aplicar Filtros";
+
+// Location Detail
+"Location Detail" = "Detalle de Ubicación";
+"Location Name" = "Nombre del Lugar";
+"Location City" = "Ciudad";
+"Location Club" = "Club";
+"Club URL" = "Club URL";
+"Coordinates" = "Coordenadas";
+"Launch Map" = "Mapa";
+"Flying Types" = "Tipos de Vuelo";
+"Description" = "Descripción";
+"Directions" = "Direcciones";
+"Location Events" = "Eventos de Ubicación";
+"Date" = "Fecha";
+"Event Name" = "Nombre del Evento";
+"Pilots" = "Pilotos";
+
+// Planes View
+"Planes" = "Aviones";
+"Plane Name" = "Nombre del Plano";
+"Max FAI Weight" = "Peso Máximo de FAI";
+
+// Plane Detail View
+"Plane Detail" = "Detalle Plano";
+"Name" = "Nombre";
+"Country" = "País";
+"Manufacturer" = "Fabricante";
+"Year" = "Año";
+"Website" = "Sitio Web";
+"Flying Types" = "Tipos de Vuelo";
+"Plane Specs" = "Especificaciones del Avión";
+"Wingspan" = "Envergadura";
+"Length" = "Longitud";
+"Wing Area" = "Área del Ala";
+"Tail Area" = "Área de Cola";
+"Pilots That Use This Plane" = "Pilotos que Usan este Avión";
+"Pilot Name" = "Nombre del Piloto";
+
+// Pilot List View
+"Pilots" = "Pilotos";
+"Pilot Name" = "Nombre del Piloto";
+
+// Pilot Search Filters
+"Search Parameters" = "Parámetros de Búsqueda";
+"By Country" = "Por País";
+"Country Code" = "Código de País";
+"Clear Search Filters" = "Borrar Filtros";
+"Apply Search Filters" = "Aplicar Filtros";
+
+// Pilot Detail View
+"Pilot Detail" = "Detalle Piloto";
+"Pilot Name" = "Nombre del Piloto";
+"Pilot Location" = "Ubicación";
+"Pilot AMA" = "Pilot AMA";
+"Pilot FAI" = "Pilot FAI";
+"Pilot FAI Lic" = "Pilot FAI Lic";
+"Pilot Planes" = "Aviones Pilotos";
+"No Planes" = "No Aviones";
+"Pilot Locations" = "Lugares Piloto";
+"No Locations" = "Sin Ubicaciones";
+"Pilot Events" = "Eventos Piloto";
+"Date" = "Fecha";
+"Event Name" = "Nombre del Evento";
+"Place" = "Sitio";

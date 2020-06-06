@@ -573,7 +573,7 @@ struct EventDetailRoundsView: View {
             }
         }
         if self.eventViewModel.eventInfo.event.event_type_code == "f3b" {
-            returnType = "F3B Multi Task Round"
+            returnType = NSLocalizedString("F3B Multi Task Round", comment: "F3B Multi Task Round")
         }
         return returnType
     }

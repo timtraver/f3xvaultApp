@@ -57,7 +57,7 @@ struct EventListView: View {
                                 Spacer()
                                 Text("Total Records : ")
                                     .font(.system(size: 10))
-                                Text(String(self.calcRecords) + " of " + String(self.totalRecords))
+                                Text(String(self.calcRecords) + NSLocalizedString(" of ", comment: "Of") + String(self.totalRecords))
                                     .font(.system(size: 10))
                             }
                             .padding(.bottom, 8)

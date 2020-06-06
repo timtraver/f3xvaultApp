@@ -184,9 +184,15 @@ struct EventDetailTasksView: View {
                                         HStack(alignment: .top){
                                             Text("")
                                                 .frame(width: 110)
-                                            Text("\(task.flight_type_description)")
-                                                .font(.system(size: 14))
-                                                .foregroundColor(.black)
+                                            if task.flight_type_code == "f3j_duration" || task.flight_type_code == "f5j_duration"{
+                                                Text("\(task.event_task_time_choice) Minute Duration with Precision Landing")
+                                                    .font(.system(size: 14))
+                                                    .foregroundColor(.black)
+                                            }else{
+                                                Text("\(task.flight_type_description)")
+                                                    .font(.system(size: 14))
+                                                    .foregroundColor(.black)
+                                            }
                                         }
                                         .frame(width: geometry.size.width)
                                         .background(Color(.systemBlue).opacity(task.rowColor ?? false ? 0.2 : 0 ))

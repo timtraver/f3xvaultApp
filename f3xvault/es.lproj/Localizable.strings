@@ -52,14 +52,14 @@
 
 // Event List View
 "Events" = "Eventos";
-"Active Filters" = "Filtros activos";
-"Set Filters" = "Establecer filtros";
-"Total Records : " = "Registros totales : ";
+"Active Filters" = "Filtros Activos";
+"Set Filters" = "Establecer Filtros";
+"Total Records : " = "Registros Totales : ";
 " of " = " de ";
-"search" = "buscar";
+"search" = "Buscar";
 "Cancel" = "Cancelar";
 "Date" = "Fecha";
-"Event Name" = "Nombre del evento";
+"Event Name" = "Nombre del Evento";
 
 // Event Search Filters
 "F3F Slope Racing" = "F3F Slope Racing";
@@ -70,32 +70,32 @@
 "Thermal Duration" = "Duración termal";
 "MOM Slope Racing" = "MOM Slope Racing";
 "GPS Triangle Racing" = "GPS Triangle Racing";
-"Event Search" = "Búsqueda de eventos";
-"Search Parameters" = "Parámetros de búsqueda";
-"Selected Search Filters" = "Filtros de búsqueda seleccionados";
+"Event Search" = "Búsqueda de Eventos";
+"Search Parameters" = "Parámetros de Búsqueda";
+"Selected Search Filters" = "Filtros de Búsqueda Seleccionados";
 "Use Date Range" = "Usar rango de fechas";
 "   Date From : " = "   Fecha de : ";
 "   Date To : " = "   Fecha hasta : ";
 "By Type" = "Por tipo";
-"Event Type" = "Tipo de evento";
-"By Country" = "Por país";
-"Country Code" = "Código de país";
-"Clear Search Filters" = "Borrar filtros de búsqueda";
-"Apply Search Filters" = "Aplicar filtros de búsqueda";
+"Event Type" = "Tipo de Evento";
+"By Country" = "Por País";
+"Country Code" = "Código de País";
+"Clear Search Filters" = "Borrar Filtros";
+"Apply Search Filters" = "Aplicar Filtros";
 
 // Event Detail View - Standings
-"Event Detail" = "Detalle del evento";
+"Event Detail" = "Detalle del Evento";
 "Back" = "Atrás";
-"Event Name" = "Nombre del evento";
+"Event Name" = "Nombre del Evento";
 "Location" = "Ubicación";
-"Start Date" = "Fecha de inicio";
-"Event Type" = "Tipo de evento";
+"Start Date" = "Fecha de Inicio";
+"Event Type" = "Tipo de Evento";
 "Event Flyoff %@ Standings" = "Evento Flyoff %@ Posiciones";
-"Event Preliminary Standings" = "Clasificación preliminar del evento";
+"Event Preliminary Standings" = "Clasificación Preliminar del Evento";
 "( %@ Rounds)" = "( %@ Rondas)";
 "Pos" = "Pos";
 "Bib" = "Bib";
-"Pilot Name" = "Nombre del piloto";
+"Pilot Name" = "Nombre del Piloto";
 "Total" = "Total";
 "Diff" = "Diff";
 "Drop" = "Soltar";
@@ -113,22 +113,22 @@
 "F3B Multi Task Round" = "F3B Ronda de tareas múltiples";
 
 // Event Detail View - Tasks only that are different from above
-"Event Tasks" = "Tareas de eventos";
-"Audio Playlist" = "Lista de audio";
+"Event Tasks" = "Tareas de Eventos";
+"Audio Playlist" = "Lista de Audio";
 "Rnd" = "Rnd";
 "Task Code" = "Task Código";
-"Task Description" = "Descripción de la tarea";
+"Task Description" = "Descripción de la Tarea";
 "%@ Minute Duration with Precision Landing" = "%@ Duración minuto con aterrizaje de precisión";
 
 // Event Detail Audio View - only that are different from above
-"Audio Prefs" = "Preferencias de audio";
+"Audio Prefs" = "Preferencias";
 "Audio Playlist Queue" = "Cola de lista de audio";
 "Num" = "Num";
 "Queue Description" = "Descripción de la cola";
 
 // Event Detail Audio Prefs View - only that are different from above
-"Audio Prefs" = "Preferencias de audio";
-"Audio Playlist Preferences" = "Preferencias de lista de audio";
+"Audio Prefs" = "Preferencias";
+"Audio Playlist Preferences" = "Preferencias de Lista de Audio";
 "Announce Pilots in Groups" = "Anunciar Pilotos en Grupos";
 "Language" = "Idioma";
 "Voice" = "Voz";
@@ -138,7 +138,7 @@
 "Timing" = "Sincronización";
 "Prep Time Length" = "Duración del Tiempo de Preparación";
 "Use 1 Minute No Fly Time" = "Use 1 Minuto sin Tiempo de Vuelo";
-"Reset To Defaults" = "Restablecer los valores predeterminados";
+"Reset To Defaults" = "Restablecer";
 "Save Audio Prefs" = "Guardar Preferencias";
 
 // Audio Pref Values
@@ -166,7 +166,7 @@
 "Location Name" = "Nombre del Lugar";
 
 // Locations Search Params
-"Locations Search" = "Búsqueda de Ubicaciones";
+"Locations Search" = "Búsqueda";
 "Search Parameters" = "Parámetros de Búsqueda";
 "By Type" = "Por Tipo";
 "Discipline Type" = "Tipo de Disciplina";
@@ -176,8 +176,8 @@
 "Apply Search Filters" = "Aplicar Filtros";
 
 // Location Detail
-"Location Detail" = "Detalle de Ubicación";
-"Location Name" = "Nombre del Lugar";
+"Location Detail" = "Detalle Ubicación";
+"Location Name" = "Nombre Lugar";
 "Location City" = "Ciudad";
 "Location Club" = "Club";
 "Club URL" = "Club URL";
@@ -225,7 +225,7 @@
 
 // Pilot Detail View
 "Pilot Detail" = "Detalle Piloto";
-"Pilot Name" = "Nombre del Piloto";
+"Pilot Name" = "Nombre Piloto";
 "Pilot Location" = "Ubicación";
 "Pilot AMA" = "Pilot AMA";
 "Pilot FAI" = "Pilot FAI";

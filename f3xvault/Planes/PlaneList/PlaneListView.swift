@@ -106,13 +106,10 @@ struct PlaneListView: View {
                     .background(Color(.systemBlue).opacity(0.5))
                     .frame(height: 0.01)
                     
-                    ScrollView(.vertical){
+                    List{
                         // Start Main Content Here
                         // Either Using the scroll view or the vstack for control
                         // // // // // // // // // // // // // // // // //
-                        Rectangle()
-                            .frame(width: geometry.size.width, height: 0.01)
-                        
                         // Main Content of view
                         ForEach(self.filterList(list: self.planeList.planeList.planes ?? [], string: self.searchText )){ plane in
                             HStack{
@@ -122,23 +119,34 @@ struct PlaneListView: View {
                                     // Navigate to detail
                                     navigateToPlaneDetailView(plane_id: plane.plane_id ?? 0, viewSettings: self.settings)
                                 }) {
-                                    Text("\(plane.plane_name!)")
-                                    Spacer()
-                                    if plane.plane_max_g != 0 {
-                                        Text(String(format: "%.0f", plane.plane_max_g!))
+                                    HStack{
+                                        Text("\(plane.plane_name!)")
+                                        Spacer()
+                                        if plane.plane_max_g != 0 {
+                                            Text(String(format: "%.0f", plane.plane_max_g!))
+                                        }
                                     }
                                 }                                
                             }
-                            .background(Color(.systemBlue).opacity(plane.rowColor! ? 0.2 : 0 ))
-                            
+                            .font(.system(size: 22))
+                            .listRowBackground(Color(.systemBlue).opacity(plane.rowColor! ? 0.2 : 0 ))
+                            .frame(height: 30)
+
                         }
                         
                         // End of Main Content Here
                         // Don't touch anything below here unless necessary
                         // \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\
-                    }.font(.system(size: 22))
+                    }
+                        .id(UUID())
+                        .padding(.horizontal, -20)
+                        .padding(.vertical, 0)
+                        .environment(\.defaultMinListRowHeight, 20)
                         .frame(width: geometry.size.width, height: geometry.size.height * 0.78 )
                         .edgesIgnoringSafeArea(.bottom)
+                        .onAppear(){
+                                UITableView.appearance().separatorStyle = .none
+                        }
                 }
                 
             }.frame(width: geometry.size.width, height: geometry.size.height * 0.88 )

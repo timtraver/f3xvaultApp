@@ -69,7 +69,7 @@ struct PilotListView: View {
                 }.frame(height: 40)
                 
                 // Main VStack Content Frame
-                VStack{
+                VStack(spacing: 0){
                     HStack {
                         HStack {
                             Image(systemName: "magnifyingglass")
@@ -112,42 +112,47 @@ struct PilotListView: View {
                         Spacer()
                     }
                     .background(Color(.systemBlue).opacity(0.5))
-                    .frame(height: 0.01)
+                    .frame(height: 25)
                     .font(.system(size: 18))
 
-                    ScrollView(.vertical){
-                        // Start Main Content Here
+                    List{
+                    // Start Main Content Here
                         // Either Using the scroll view or the vstack for control
                         // // // // // // // // // // // // // // // // //
-                        Rectangle()
-                            .frame(width: geometry.size.width, height: 0.01)
-                        
+
                         // Main Content of view
                         ForEach(self.filterList(list: self.pilotList.pilotList.pilots ?? [], string: self.searchText )){ pilot in
                             HStack{
-                                Text(getFlag(from: pilot.country_code ?? ""))
+                                Text(getFlag(from: pilot.country_code ?? "" ))
                                     .frame(width: 30)
-                                
                                 Button(action: {
                                     // Navigate to detail
-                                    navigateToPilotDetailView(pilot_id: pilot.pilot_id ?? 0, viewSettings: self.settings)
+                                    navigateToPilotDetailView(pilot_id: pilot.pilot_id , viewSettings: self.settings)
                                     return
                                 }) {
-                                    Text("\(pilot.pilot_first_name!) \(pilot.pilot_last_name!)")
+                                    Text("\(pilot.pilot_first_name ?? "" ) \(pilot.pilot_last_name ?? "" )")
                                 }
-                                
                                 Spacer()
                             }
-                            .background(Color(.systemBlue).opacity(pilot.rowColor! ? 0.2 : 0 ))
-                            
+                            .font(.system(size: 22))
+                            .padding(0)
+                            .listRowBackground(Color(.systemBlue).opacity(pilot.rowColor! ? 0.2 : 0 ))
+                            .frame(height: 30)
                         }
-                        
+
                         // End of Main Content Here
                         // Don't touch anything below here unless necessary
                         // \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\
-                    }.font(.system(size: 22))
-                        .frame(width: geometry.size.width, height: geometry.size.height * 0.78 )
-                        .edgesIgnoringSafeArea(.bottom)
+                    }
+                    .id(UUID())
+                    .padding(.horizontal, -20)
+                    .padding(.vertical, 0)
+                    .environment(\.defaultMinListRowHeight, 20)
+                    .frame(width: geometry.size.width, height: geometry.size.height * 0.78 )
+                    .edgesIgnoringSafeArea(.bottom)
+                    .onAppear(){
+                            UITableView.appearance().separatorStyle = .none
+                    }
                 }
                 
             }.frame(width: geometry.size.width, height: geometry.size.height * 0.88 )
@@ -183,9 +188,15 @@ struct PilotListView: View {
                 exclude = 1
             }
             
-            if string != "" && !((pilot.pilot_first_name?.lowercased().contains(string.lowercased()))! && !((pilot.pilot_last_name?.lowercased().contains(string.lowercased()))! )){
+            if string != "" {
+                let searchString = string.lowercased()
+                if !(pilot.pilot_first_name?.lowercased().contains(searchString) ?? false)
+                    && !(pilot.pilot_last_name?.lowercased().contains(searchString) ?? false) {
+                    exclude = 1
+                }
+            }
+            if pilot.pilot_first_name == "" {
                 exclude = 1
-                
             }
             if exclude == 0 {
                 colorRow.toggle()

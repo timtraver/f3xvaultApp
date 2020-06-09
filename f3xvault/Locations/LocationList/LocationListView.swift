@@ -122,12 +122,10 @@ struct LocationListView: View {
                     .frame(height: 0.01)
                     .font(.system(size: 18))
 
-                    ScrollView(.vertical){
+                    List{
                         // Start Main Content Here
                         // Either Using the scroll view or the vstack for control
                         // // // // // // // // // // // // // // // // //
-                        Rectangle()
-                            .frame(width: geometry.size.width, height: 0.01)
                         
                         // Main Content of view
                         ForEach(self.filterList(list: self.locationList.locationList.locations ?? [], string: self.searchText )){ location in
@@ -144,15 +142,25 @@ struct LocationListView: View {
                                 
                                 Spacer()
                             }
-                            .background(Color(.systemBlue).opacity(location.rowColor! ? 0.2 : 0 ))
+                            .font(.system(size: 22))
+                            .padding(0)
+                            .listRowBackground(Color(.systemBlue).opacity(location.rowColor! ? 0.2 : 0 ))
+                            .frame(height: 30)
                         }
                         
                         // End of Main Content Here
                         // Don't touch anything below here unless necessary
                         // \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\
-                    }.font(.system(size: 22))
+                    }
+                        .id(UUID())
+                        .padding(.horizontal, -20)
+                        .padding(.vertical, 0)
+                        .environment(\.defaultMinListRowHeight, 20)
                         .frame(width: geometry.size.width, height: geometry.size.height * 0.78 )
                         .edgesIgnoringSafeArea(.bottom)
+                        .onAppear(){
+                                UITableView.appearance().separatorStyle = .none
+                        }
                 }
                 
             }.frame(width: geometry.size.width, height: geometry.size.height * 0.88 )

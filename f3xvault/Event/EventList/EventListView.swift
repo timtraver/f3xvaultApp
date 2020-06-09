@@ -118,13 +118,11 @@ struct EventListView: View {
                     .frame(height: 1)
                     .font(.system(size: 18))
                     
-                    ScrollView{
+                    List{
                         // Start Main Content Here
                         // Either Using the scroll view or the vstack for control
                         // // // // // // // // // // // // // // // // //
-                        Rectangle()
-                            .frame(width: geometry.size.width, height: 0.01)
-                        
+
                         //Main Content of view
                         ForEach(self.filterList(list: self.eventList.eventList.events ?? [], string: self.searchText )){ event in
                             HStack(alignment: .top){
@@ -135,21 +133,34 @@ struct EventListView: View {
                                     navigateToEventDetailView(event_id: event.event_id ?? 0, viewSettings: self.settings)
                                     return
                                 }) {
-                                    Text(showDate(dateString: event.event_start_date ?? "") )
-                                        .frame(width: 65)
-                                    Text("\(event.event_name!)")
-                                    Spacer()
+                                    HStack{
+                                        Text(showDate(dateString: event.event_start_date ?? "") )
+                                            .frame(width: 65)
+                                        Text("\(event.event_name!)")
+                                        Spacer()
+                                    }
                                 }
-                            }.background(Color(.systemBlue).opacity(event.rowColor! ? 0.2 : 0 ))
+                            }
+                            .font(.system(size: 22))
+                            .padding(0)
+                            .listRowBackground(Color(.systemBlue).opacity(event.rowColor! ? 0.2 : 0 ))
+                            .frame(height: 30)
                         }
                         
                         
                         // End of Main Content Here
                         // Don't touch anything below here unless necessary
                         // \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\
-                    }.font(.system(size: 22))
+                    }
+                        .id(UUID())
+                        .padding(.horizontal, -20)
+                        .padding(.vertical, 0)
+                        .environment(\.defaultMinListRowHeight, 20)
                         .frame(width: geometry.size.width, height: geometry.size.height * 0.78 )
                         .edgesIgnoringSafeArea(.bottom)
+                        .onAppear(){
+                                UITableView.appearance().separatorStyle = .none
+                        }
                 }
                 
             }.frame(width: geometry.size.width, height: geometry.size.height * 0.88 )

@@ -18,11 +18,18 @@ struct PilotSearchList: Codable{
 }
 struct PilotInfo: Codable, Identifiable{
     let id = UUID()
-    var pilot_id: Int? = 0
-    var pilot_first_name: String? = ""
-    var pilot_last_name: String? = ""
-    var country_code: String? = ""
-    var rowColor: Bool? = false
+    var pilot_id: Int
+    var pilot_first_name: String?
+    var pilot_last_name: String?
+    var country_code: String?
+    var rowColor: Bool?
+    init(){
+        self.pilot_id = 0
+        self.pilot_first_name = ""
+        self.pilot_last_name = ""
+        self.country_code = ""
+        self.rowColor = false
+    }
 }
 
 // Pilot Structures for getPilotInfo

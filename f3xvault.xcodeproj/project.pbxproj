@@ -46,6 +46,7 @@
 		28AD0873243D9BB000671751 /* PlaneModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AD0872243D9BB000671751 /* PlaneModel.swift */; };
 		28AD0875243EBDCE00671751 /* PlaneDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AD0874243EBDCE00671751 /* PlaneDetailView.swift */; };
 		28AD08772440DD8200671751 /* PlaneDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AD08762440DD8200671751 /* PlaneDetailViewModel.swift */; };
+		28AE7D4B2498852C000D90E5 /* bluetooth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AE7D4A2498852C000D90E5 /* bluetooth.swift */; };
 		28CF3017244C010C008C6630 /* PilotSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CF3016244C010C008C6630 /* PilotSearchViewModel.swift */; };
 		28CF3019244C0121008C6630 /* PilotListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CF3018244C0121008C6630 /* PilotListView.swift */; };
 		28CF301B244C390E008C6630 /* PilotSearchParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CF301A244C390E008C6630 /* PilotSearchParams.swift */; };
@@ -116,6 +117,7 @@
 		28AD0872243D9BB000671751 /* PlaneModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaneModel.swift; sourceTree = "<group>"; };
 		28AD0874243EBDCE00671751 /* PlaneDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaneDetailView.swift; sourceTree = "<group>"; };
 		28AD08762440DD8200671751 /* PlaneDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaneDetailViewModel.swift; sourceTree = "<group>"; };
+		28AE7D4A2498852C000D90E5 /* bluetooth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = bluetooth.swift; sourceTree = "<group>"; };
 		28CF3016244C010C008C6630 /* PilotSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PilotSearchViewModel.swift; sourceTree = "<group>"; };
 		28CF3018244C0121008C6630 /* PilotListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PilotListView.swift; sourceTree = "<group>"; };
 		28CF301A244C390E008C6630 /* PilotSearchParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PilotSearchParams.swift; sourceTree = "<group>"; };
@@ -398,6 +400,7 @@
 			children = (
 				28FBE520243962AB00563AE9 /* KeychainSwift.swift */,
 				28FFC43224341ABD0070416B /* f3xvault_api.swift */,
+				28AE7D4A2498852C000D90E5 /* bluetooth.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -496,6 +499,7 @@
 				28576DD9243AA68D0078050C /* PilotDetailView.swift in Sources */,
 				282A824A2442A39B00A54B17 /* EventSearchParams.swift in Sources */,
 				285F7B45243D4916008E710C /* SkeletonView.swift in Sources */,
+				28AE7D4B2498852C000D90E5 /* bluetooth.swift in Sources */,
 				28846488244832EC000F93E4 /* LocationModel.swift in Sources */,
 				28E9953124843BDB006E14FD /* ScrollableView.swift in Sources */,
 				28AD0871243D9B7900671751 /* PlaneSearchViewModel.swift in Sources */,

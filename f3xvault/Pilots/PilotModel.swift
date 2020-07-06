@@ -61,7 +61,7 @@ struct PilotPlanes: Codable, Identifiable {
     var plane_name: String? = ""
     var pilot_plane_color: String? = ""
     var pilot_plane_serial: String? = ""
-    var pilot_plane_auw: Int? = 0
+    var pilot_plane_auw: Double? = 0.0
     var pilot_plane_auw_units: String? = ""
 }
 struct PilotLocations: Codable, Identifiable {

@@ -144,7 +144,7 @@ struct PilotDetailView: View {
                                                             .lineLimit(1)
                                                             .font(.system(size: 8))
                                                         if plane.pilot_plane_auw != 0{
-                                                            Text("\(plane.pilot_plane_auw!) \(plane.pilot_plane_auw_units!)")
+                                                            Text( String(format: "%.02f", plane.pilot_plane_auw!)  + " \(plane.pilot_plane_auw_units!)")
                                                                 .font(.system(size: 8))
                                                         }
                                                         Spacer()

@@ -107,6 +107,7 @@ class EventDetailViewModel: ObservableObject {
             for round in rounds {
                 let taskInfo: [String:String] = getTaskDescription(round: round.round_number)
                 let prepTime: Int = UserDefaults.standard.integer( forKey: "audioPrepTime" )
+                let betweenTime: Double = UserDefaults.standard.double( forKey: "audioBetweenTime" )
                 let announcePilots: Bool = UserDefaults.standard.bool( forKey: "audioAnnouncePilots" )
                 let noFlyTime: Bool = UserDefaults.standard.bool( forKey: "audioNoFlyTime" )
                 let roundType = round.flight_type_name
@@ -277,26 +278,39 @@ class EventDetailViewModel: ObservableObject {
                         sequence += 1
                     } // end of for loop of windows
                     
-                    // 10 second round separation
+                    // round separation time
                     tempEntry = playQueueEntry()
                     tempEntry.sequenceID = sequence
-                    tempEntry.textDescription = "10 Second Spacer"
-                    tempEntry.spokenText = ""
+                    let betweenTimeSeconds = Int( betweenTime * 60 )
+                    var betweenString: String = ""
+                    if betweenTimeSeconds < 60 {
+                        betweenString = "\(betweenTimeSeconds) Second"
+                    }else{
+                        let minuteInt = Int( betweenTimeSeconds / 60 )
+                        betweenString = "\(minuteInt) Minute"
+                    }
+                    tempEntry.textDescription = "\(betweenString) Group Separation Time"
+                    tempEntry.spokenText = "\(betweenString) Group Separation Time"
+                    tempEntry.spokenPreDelay = 2.0
+                    tempEntry.spokenTextWait = false
+                    tempEntry.spokenTextOnCountdown = "Until Next Group"
                     tempEntry.hasTimer = true
+                    tempEntry.timerEveryThirty = true
                     tempEntry.timerLastTen = false
-                    tempEntry.timerSeconds = 10.0
+                    tempEntry.timerSeconds = betweenTime * 60
+                    tempEntry.hasEndHorn = false
                     rowColor.toggle()
                     tempEntry.rowColor = rowColor
                     playList.append(tempEntry)
                     sequence += 1
-                    
+
                 }
             }
             // Create playlist entry for end of contest
             tempEntry = playQueueEntry()
             tempEntry.sequenceID = sequence
             tempEntry.textDescription = "End of contest."
-            tempEntry.spokenText = "End of contest. Thank you for flying with us. Have a nice day."
+            tempEntry.spokenText = "End of contest. Thank you for flying with F 3 X Vault. Have a nice day."
             rowColor.toggle()
             tempEntry.rowColor = rowColor
             playList.append(tempEntry)
@@ -313,8 +327,8 @@ class EventDetailViewModel: ObservableObject {
             for round in rounds {
                 let taskInfo: EventTask = getTask(round: round.round_number)
                 let prepTime: Int = UserDefaults.standard.integer( forKey: "audioPrepTime" )
+                let betweenTime: Double = UserDefaults.standard.double( forKey: "audioBetweenTime" )
                 let announcePilots: Bool = UserDefaults.standard.bool( forKey: "audioAnnouncePilots" )
-                let noFlyTime: Bool = UserDefaults.standard.bool( forKey: "audioNoFlyTime" )
                 let windowTime: Int = taskInfo.event_task_time_choice
 
                 for group in groups {
@@ -379,49 +393,20 @@ class EventDetailViewModel: ObservableObject {
                     tempEntry.spokenText = "\(prepTime) minutes remaining in prep time."
                     tempEntry.spokenTextWait = false
                     tempEntry.spokenPreDelay = 3.0
-                    if noFlyTime {
-                        tempEntry.spokenTextOnCountdown = "remaining before no fly window."
-                    }else{
-                        tempEntry.spokenTextOnCountdown = "remaining before launch window."
-                    }
+                    tempEntry.spokenTextOnCountdown = "remaining before launch window."
                     tempEntry.hasTimer = true
                     tempEntry.hasBeginHorn = true
                     tempEntry.beginHornLength = 1
                     tempEntry.timerSeconds = Double( prepTime * 60 )
                     tempEntry.timerEveryFifteen = true
                     tempEntry.timerEveryThirty = true
-                    if noFlyTime == false {
-                        tempEntry.hasEndHorn = true
-                        tempEntry.endHornLength = 2
-                    }
+                    tempEntry.hasEndHorn = true
+                    tempEntry.endHornLength = 3
                     rowColor.toggle()
                     tempEntry.rowColor = rowColor
                     playList.append(tempEntry)
                     sequence += 1
                     
-                    if noFlyTime  {
-                    // Add the 1 minute no fly time
-                        tempEntry = playQueueEntry()
-                        tempEntry.sequenceID = sequence
-                        tempEntry.textDescription = "1:00 No Fly Time"
-                        tempEntry.spokenText = "1 Minute no fly time before launch window"
-                        tempEntry.spokenPreDelay = 1.5
-                        tempEntry.spokenTextWait = false
-                        tempEntry.spokenTextOnCountdown = "remaining before launch window"
-                        tempEntry.hasBeginHorn = true
-                        tempEntry.beginHornLength = 1
-                        tempEntry.hasTimer = true
-                        tempEntry.timerSeconds = 60
-                        tempEntry.timerEveryFifteen = true
-                        tempEntry.timerLastTen = true
-                        tempEntry.hasEndHorn = true
-                        tempEntry.endHornLength = 2
-                        rowColor.toggle()
-                        tempEntry.rowColor = rowColor
-                        playList.append(tempEntry)
-                        sequence += 1
-                    }
-                        
                     // Add the window time entry
                     tempEntry = playQueueEntry()
                     tempEntry.sequenceID = sequence
@@ -461,26 +446,39 @@ class EventDetailViewModel: ObservableObject {
                     playList.append(tempEntry)
                     sequence += 1
                     
-                    // 10 second round separation
+                    // round separation time
                     tempEntry = playQueueEntry()
                     tempEntry.sequenceID = sequence
-                    tempEntry.textDescription = "10 Second Spacer"
-                    tempEntry.spokenText = ""
+                    let betweenTimeSeconds = Int( betweenTime * 60 )
+                    var betweenString: String = ""
+                    if betweenTimeSeconds < 60 {
+                        betweenString = "\(betweenTimeSeconds) Second"
+                    }else{
+                        let minuteInt = Int( betweenTimeSeconds / 60 )
+                        betweenString = "\(minuteInt) Minute"
+                    }
+                    tempEntry.textDescription = "\(betweenString) Group Separation Time"
+                    tempEntry.spokenText = "\(betweenString) Group Separation Time"
+                    tempEntry.spokenPreDelay = 2.0
+                    tempEntry.spokenTextWait = false
+                    tempEntry.spokenTextOnCountdown = "Until Next Group"
                     tempEntry.hasTimer = true
+                    tempEntry.timerEveryThirty = true
                     tempEntry.timerLastTen = false
-                    tempEntry.timerSeconds = 10.0
+                    tempEntry.timerSeconds = betweenTime * 60
+                    tempEntry.hasEndHorn = false
                     rowColor.toggle()
                     tempEntry.rowColor = rowColor
                     playList.append(tempEntry)
                     sequence += 1
-                    
+
                 }
             }
             // Create playlist entry for end of contest
             tempEntry = playQueueEntry()
             tempEntry.sequenceID = sequence
             tempEntry.textDescription = "End of contest."
-            tempEntry.spokenText = "End of contest. Thank you for flying with us. Have a nice day."
+            tempEntry.spokenText = "End of contest. Thank you for flying with F 3 X Vault. Have a nice day."
             rowColor.toggle()
             tempEntry.rowColor = rowColor
             playList.append(tempEntry)

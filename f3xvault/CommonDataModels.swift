@@ -64,6 +64,7 @@ class VaultSettings: ObservableObject {
     @Published var audioVoice: String
     @Published var audioLanguage: String
     @Published var audioPrepTime: Int
+    @Published var audioBetweenTime: Double
     @Published var audioNoFlyTime: Bool
     @Published var audioAnnouncePilots: Bool
     @Published var audioHorn: Int
@@ -105,6 +106,11 @@ class VaultSettings: ObservableObject {
             self.audioPrepTime = UserDefaults.standard.integer( forKey: "audioPrepTime" )
         }else{
             self.audioPrepTime = 2
+        }
+        if UserDefaults.contains("audioBetweenTime") {
+            self.audioBetweenTime = UserDefaults.standard.double( forKey: "audioBetweenTime" )
+        }else{
+            self.audioBetweenTime = 1
         }
         if UserDefaults.contains("audioNoFlyTime") {
             self.audioNoFlyTime = UserDefaults.standard.bool( forKey: "audioNoFlyTime" )

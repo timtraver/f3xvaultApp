@@ -29,6 +29,7 @@ func saveSettings(settings: VaultSettings){
     UserDefaults.standard.set( settings.audioVoice, forKey: "audioVoice")
     UserDefaults.standard.set( settings.audioLanguage, forKey: "audioLanguage")
     UserDefaults.standard.set( settings.audioPrepTime, forKey: "audioPrepTime")
+    UserDefaults.standard.set( settings.audioBetweenTime, forKey: "audioBetweenTime")
     UserDefaults.standard.set( settings.audioNoFlyTime, forKey: "audioNoFlyTime")
     UserDefaults.standard.set( settings.audioAnnouncePilots, forKey: "audioAnnouncePilots")
     UserDefaults.standard.set( settings.audioHorn, forKey: "audioHorn")
@@ -216,6 +217,17 @@ func getPrepTimes() -> [(key: Int, value: String)] {
         3 : NSLocalizedString("3 Minutes", comment: "Time"),
         4 : NSLocalizedString("4 Minutes", comment: "Time"),
         5 : NSLocalizedString("5 Minutes", comment: "Time"),
+        ].sorted{$0.key < $1.key}
+}
+func getBetweenTimes() -> [(key: Double, value: String)] {
+    return [
+        0.25 : NSLocalizedString("15 Seconds", comment: "Time"),
+        0.50 : NSLocalizedString("30 Seconds", comment: "Time"),
+        1.00 : NSLocalizedString("1 Minute", comment: "Time"),
+        2.00 : NSLocalizedString("2 Minutes", comment: "Time"),
+        3.00 : NSLocalizedString("3 Minutes", comment: "Time"),
+        4.00 : NSLocalizedString("4 Minutes", comment: "Time"),
+        5.00 : NSLocalizedString("5 Minutes", comment: "Time"),
         ].sorted{$0.key < $1.key}
 }
 func getVolumes() -> [(key: Float, value: String)] {

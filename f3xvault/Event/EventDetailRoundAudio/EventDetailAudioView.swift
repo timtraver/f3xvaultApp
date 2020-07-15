@@ -370,7 +370,7 @@ struct EventDetailAudioView: View {
                 currentSeconds <= 60 { speak = true }
             if self.eventViewModel.playListQueue[self.currentQueueEntry].timerEveryMinute && currentSeconds % 60 == 0 { speak = true }
             if self.eventViewModel.playListQueue[self.currentQueueEntry].timerEveryTenInLastMinute && currentSeconds % 10 == 0 && currentSeconds <= 60 { speak = true }
-            if self.eventViewModel.playListQueue[self.currentQueueEntry].timerEveryThirty && currentSeconds >= 60 && currentSeconds % 30 == 0 { speak = true }
+            if self.eventViewModel.playListQueue[self.currentQueueEntry].timerEveryThirty && currentSeconds % 30 == 0 { speak = true }
             if currentSeconds == Int(self.clockTotalSeconds) { speak = false }
             if currentSeconds == 0 { speak = false }
             

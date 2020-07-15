@@ -15,6 +15,7 @@ struct EventDetailAudioPrefsView: View {
     @EnvironmentObject var settings: VaultSettings
     
     @State var selectedPrepTime: Int = UserDefaults.standard.integer( forKey: "audioPrepTime" )
+    @State var selectedBetweenTime: Double = UserDefaults.standard.double( forKey: "audioBetweenTime" )
     @State var selectedNoFlyTime: Bool = UserDefaults.standard.bool( forKey: "audioNoFlyTime" )
     @State var selectedLanguage: String = UserDefaults.standard.string( forKey: "audioLanguage" ) ?? "en"
     @State var selectedVoice: String = UserDefaults.standard.string( forKey: "audioVoice" ) ?? "com.apple.ttsbundle.Samantha-compact"
@@ -28,6 +29,7 @@ struct EventDetailAudioPrefsView: View {
     let voices = getVoices()
     let languages = getLanguages()
     let prepTimes = getPrepTimes()
+    let inBetweenTimes = getBetweenTimes()
     let horns = getHorns()
     let hornVolumes = getVolumes()
     
@@ -89,10 +91,18 @@ struct EventDetailAudioPrefsView: View {
                                             Text(time.value)
                                         }
                                     }
+                                    Picker(selection: self.$selectedBetweenTime, label: Text("Time Between Rounds")) {
+                                        ForEach( self.inBetweenTimes, id: \.key) { between in
+                                            Text(between.value)
+                                        }
+                                    }
+                                }
+                                Section(header: Text("For F3K Only")){
                                     Toggle(isOn: self.$selectedNoFlyTime) {
                                         Text("Use 1 Minute No Fly Time")
                                     }
                                 }
+
                             }
                             .navigationBarTitle("")
                             .navigationBarHidden(true)
@@ -104,6 +114,7 @@ struct EventDetailAudioPrefsView: View {
                             self.settings.audioLanguage = "en"
                             self.settings.audioVoice = "com.apple.ttsbundle.Samantha-compact"
                             self.settings.audioPrepTime = 2
+                            self.settings.audioBetweenTime = 1
                             self.settings.audioNoFlyTime = true
                             self.settings.audioAnnouncePilots = true
                             self.settings.audioHorn = 0
@@ -141,6 +152,7 @@ struct EventDetailAudioPrefsView: View {
                             self.settings.audioVoice = self.selectedVoice
                             self.settings.audioAnnouncePilots = self.selectedAnnouncePilots
                             self.settings.audioPrepTime = self.selectedPrepTime
+                            self.settings.audioBetweenTime = self.selectedBetweenTime
                             self.settings.audioNoFlyTime = self.selectedNoFlyTime
                             self.settings.audioHorn = self.selectedHorn
                             self.settings.audioHornVolume = self.selectedHornVolume
